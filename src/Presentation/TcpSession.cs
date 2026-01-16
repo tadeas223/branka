@@ -1,5 +1,6 @@
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 
 namespace Presentation;
@@ -24,6 +25,21 @@ public class TcpSession : IDisposable
         Socket = socket;
         SessionId = Guid.NewGuid();
     }
+    
+    public void Write(string msg)
+    {
+        using NetworkStream stream = new NetworkStream(Socket, ownsSocket: false);
+        
+        byte[] buffer = Encoding.UTF8.GetBytes(msg);
+        stream.Write(buffer, 0, buffer.Length); 
+    }
+    
+    public void WriteLine(string msg)
+    {
+        msg += '\n';
+        Write(msg);
+    }
+
 
     public void Register()
     {

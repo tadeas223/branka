@@ -6,6 +6,7 @@ using System.Runtime.Intrinsics.X86;
 using Application;
 using Application.Commands;
 using Utils;
+using WorkDispatcher;
 
 namespace Presentation;
 
@@ -15,13 +16,13 @@ public class TcpServer : IDisposable
 
     CancellationTokenSource cts = new();
     TcpListener socketListener = new TcpListener(IPAddress.Any, PORT);
-    CommandDispatcher dispatcher;
+    Dispatcher<Command> commandDispatcher;
 
     ConcurrentDictionary<TcpSession, SessionHandler> sessions = new();
 
-    public TcpServer(CommandDispatcher dispatcher)
+    public TcpServer(Dispatcher<Command> commandDispatcher)
     {
-        this.dispatcher = dispatcher;
+        this.commandDispatcher = commandDispatcher;
     }
 
     public async Task StartAsync()
@@ -61,7 +62,8 @@ public class TcpServer : IDisposable
         handler.OnMessageReceived += (msg) => 
         {
             Command cmd = CommandParser.Parse(msg);
-            dispatcher.Enqueue(cmd);
+            cmd.Session = session;
+            commandDispatcher.Add(cmd);
         };
 
         handler.Start();

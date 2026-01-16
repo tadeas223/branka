@@ -70,7 +70,6 @@ public class SessionHandler : IDisposable
 
             stopwatch.Reset();
         }
-        stopwatch.Stop();
     }
 
     private void ProcessBuffer()
