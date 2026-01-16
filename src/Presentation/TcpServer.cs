@@ -91,4 +91,18 @@ public class TcpServer : IDisposable
             this.task = task;
         }
     }
+    private static string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+
+        // Look for an IPv4 address that is not loopback
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
+            {
+                return ip.ToString();
+            }
+        }
+        return null;
+    }
 }

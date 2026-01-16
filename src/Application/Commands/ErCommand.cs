@@ -2,11 +2,11 @@ using Presentation;
 
 namespace Application.Commands;
 
-public class TestCommand : Command
+public class ErCommand : Command
 {
 
     public override void Execute()
     {
-        Session.WriteLine("ahoj");
+        Session.WriteLine($"ER {Params[0]}");
     }
 }
