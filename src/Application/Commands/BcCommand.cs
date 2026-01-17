@@ -1,33 +1,18 @@
 using System.Net;
 using System.Net.Sockets;
 using Presentation;
+using Utils;
 
 namespace Application.Commands;
 
-public class BrCommand : Command
+public class BcCommand : Command
 {
 
-    public override void Execute()
+    public override void InternalExecute()
     {
-        string? ip = GetLocalIPAddress();
-        if(ip == null)
-        {
-            Session.WriteLine($"ER internal error while reteiving an ip address");
-        }
-        Session.WriteLine($"BR {ip}");
-    }
-    
-    private static string? GetLocalIPAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
+        string? ip = UtilFuncs.GetLocalIPAddress();
 
-        foreach (var ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
-            {
-                return ip.ToString();
-            }
-        }
-        return null;
+        Session.WriteLine($"BC {ip}");
     }
+
 }

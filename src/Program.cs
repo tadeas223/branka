@@ -1,5 +1,7 @@
 ﻿using Application;
 using Application.Commands;
+using Data;
+using Application.Models;
 using Presentation;
 using Utils;
 using WorkDispatcher;
@@ -16,7 +18,7 @@ if(!Database.Exists(credentials))
     Database.Create(credentials);
 }
 
-Database database = new Database(credentials);
+using Database database = new Database(credentials);
 
 TcpServer server = new(dispatcher, database);
 await server.StartAsync();

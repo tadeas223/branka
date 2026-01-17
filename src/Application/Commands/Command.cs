@@ -1,5 +1,7 @@
 using Presentation;
 using WorkDispatcher;
+using Data;
+using Utils;
 
 namespace Application.Commands;
 
@@ -46,5 +48,28 @@ public abstract class Command: IWorkerTask
 
     public Command(){}
 
-    public abstract void Execute();
+    public abstract void InternalExecute();
+
+    public void Execute()
+    {
+        try
+        {
+            InternalExecute();
+        }
+        catch (BankException e)
+        {
+            Session.WriteLine($"ER {e.Message}");
+            Log.Error($"{Session.Socket.RemoteEndPoint} bank error: {e}");
+        }
+        catch (DatabaseException e)
+        {
+            Session.WriteLine($"ER something went wrong with the database: {e.Message}");
+            Log.Error($"{Session.Socket.RemoteEndPoint} database error: {e}");
+        }
+        catch(Exception e)
+        {
+            Session.WriteLine("ER uncaugnt internal error");
+            Log.Error($"{Session.Socket.RemoteEndPoint} uncaught internal error: {e}");
+        }
+    }
 }

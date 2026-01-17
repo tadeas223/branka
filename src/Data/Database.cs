@@ -9,7 +9,7 @@ public class Database : IDisposable
     /// <summary>
     /// Path to a SQL script for initializing the database tables.
     /// <\summary>
-    public static string DATABASE_SQL = "database.sql";
+    public static string DATABASE_SQL = Path.Combine(AppContext.BaseDirectory, "database.sql");
     
     private SqlConnection connection;
     
@@ -58,7 +58,6 @@ public class Database : IDisposable
         }
         
         conBuilder = credentials.ConnectionBuilder;
-        Console.WriteLine(conBuilder.ConnectionString);
         using(var connection = new SqlConnection(conBuilder.ConnectionString)) {
             connection.Open();
             

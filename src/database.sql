@@ -1,9 +1,9 @@
-CREATE TABLE account (
-    account_id INT IDENTITY(10000, 1) NOT NULL,
+CREATE TABLE account_table (
+    id INT IDENTITY(10000, 1) NOT NULL,
     balance BIGINT NOT NULL,
 
-    PRIMARY KEY (account_id),
+    PRIMARY KEY (id),
 
     CHECK (balance BETWEEN 0 AND 9223372036854775807),
-    CHECK (accont_id BETWEEN 10000 AND 99999)
+    CHECK (id BETWEEN 10000 AND 99999)
 );

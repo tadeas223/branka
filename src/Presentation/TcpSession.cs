@@ -32,13 +32,29 @@ public class TcpSession : IDisposable
         using NetworkStream stream = new NetworkStream(Socket, ownsSocket: false);
         
         byte[] buffer = Encoding.UTF8.GetBytes(msg);
-        stream.Write(buffer, 0, buffer.Length); 
+        stream.Write(buffer, 0, buffer.Length);
+        stream.Flush();
     }
     
     public void WriteLine(string msg)
     {
         msg += '\n';
         Write(msg);
+    }
+    
+    public async Task WriteAsync(string msg)
+    {
+        using NetworkStream stream = new NetworkStream(Socket, ownsSocket: false);
+        
+        byte[] buffer = Encoding.UTF8.GetBytes(msg);
+        await stream.WriteAsync(buffer, 0, buffer.Length);
+        stream.Flush();
+    }
+    
+    public async Task WriteLineAsync(string msg)
+    {
+        msg += '\n';
+        await WriteAsync(msg);
     }
 
 
@@ -50,6 +66,8 @@ public class TcpSession : IDisposable
     public void Dispose()
     {
         Server.TerminateSession(this, "unknown");
+        Socket.Close();
+        Socket.Dispose();
     }
 
     public override bool Equals(object? obj)

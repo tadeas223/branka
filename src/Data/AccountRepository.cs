@@ -1,8 +1,8 @@
 namespace Data;
 
-using Application.Commands;
 using Application.Models;
 using Microsoft.Data.SqlClient;
+using Utils;
 
 public class AccountRepository
 {
@@ -30,33 +30,37 @@ public class AccountRepository
 
     public void Insert(Account account)
     {
-        using var command = new SqlCommand("INSERT INTO account(balance) VALUCES (@balance)", database.Connection);
-        command.Parameters.AddWithValue("@balance", account.Balace);
-        
-        using var command2 = new SqlCommand("SELECT TOP 1 account_id FROM account ORDER BY account_id DESC", database.Connection);
-        var result = command2.ExecuteScalar();
-        int id = Convert.ToInt32(result); 
+        using var command = new SqlCommand(
+            "INSERT INTO account_table(balance) VALUES (@balance); SELECT CAST(SCOPE_IDENTITY() AS INT)",
+            database.Connection
+        );
+        command.Parameters.AddWithValue("@balance", account.Balance);
+        account.Id = (int)command.ExecuteScalar();
 
-        account.Id = id;
+        Log.Info($"created account {account}");
     }
     
     public void Update(Account oldAccount, Account newAccount)
     {
-        using var command = new SqlCommand("UPDATE account SET balance=@balance WHERE account_id = @id");
+        using var command = new SqlCommand("UPDATE account_table SET balance=@balance WHERE id = @id", database.Connection);
         command.Parameters.AddWithValue("@id", oldAccount.Id);
-        command.Parameters.AddWithValue("@balance", newAccount.Id);
+        command.Parameters.AddWithValue("@balance", newAccount.Balance);
 
         command.ExecuteNonQuery();
     }
     
     public Account SelectById(int id)
     {
-        using var command = new SqlCommand("SELECT account_id, balance FROM account WHERE account_id = @id", database.Connection);
+        using var command = new SqlCommand("SELECT id, balance FROM account_table WHERE id = @id", database.Connection);
         command.Parameters.AddWithValue("@id", id);
         using var reader = command.ExecuteReader(); 
         if(reader.Read())
         {
-            return new Account(reader.GetInt32(0), reader.GetString(1));
+            return new Account
+            {
+                Id = reader.GetInt32(0),
+                Balance = reader.GetInt64(1)
+            };
         }
         throw new DatabaseException($"Account with id {id} not found"); 
     }

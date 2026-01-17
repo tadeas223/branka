@@ -1,23 +1,28 @@
+using Utils;
+
 namespace Application.Models;
 
 public class Account
 {
     public int Id {get; set;}
-    public long Balace {get; set;}
+    public long Balance {
+        set
+        {
+            if(value < 0)
+            {
+                throw new BankException("account balance cannot be negative");
+            }
+            Balance = value;
+        }
+        get
+        {
+            return Balance;
+        }
+    }
     public string? Ip {get; set;}
 
-    public Account(int id, string ip, long balance)
+    public override string ToString()
     {
-        Id = id;
-        Ip = ip;
-        Balace = balance;
+        return $"{Id}/{Ip}";
     }
-    
-    public Account(int id, string ip)
-    {
-        Id = id;
-        Ip = ip;
-        Balace = 0;
-    }
-
 }

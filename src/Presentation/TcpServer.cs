@@ -1,3 +1,4 @@
+using Data;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Net;
@@ -47,7 +48,6 @@ public class TcpServer : IDisposable
         if(sessionHandler == null)
         {
             Log.Warn($"session {session.Socket.RemoteEndPoint} was not registered with this server, session handler is LEAKED");
-            session.Dispose();
             return;
         }
 
