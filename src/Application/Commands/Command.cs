@@ -8,6 +8,7 @@ public abstract class Command: IWorkerTask
     public List<string> Params {get; set;} = new();
 
     private TcpSession? session = null;
+    private Database? database = null;
 
     public TcpSession Session
     {
@@ -23,6 +24,23 @@ public abstract class Command: IWorkerTask
         set
         {
             session = value;
+        }
+    }
+    
+    public Database Database
+    {
+        get
+        {
+            if(database== null)
+            {
+                throw new NullReferenceException("database was not set");
+            }
+            return database;
+        }
+
+        set
+        {
+            database = value;
         }
     }
 

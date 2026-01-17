@@ -17,12 +17,14 @@ public class TcpServer : IDisposable
     CancellationTokenSource cts = new();
     TcpListener socketListener = new TcpListener(IPAddress.Any, PORT);
     Dispatcher<Command> commandDispatcher;
+    Database database;
 
     ConcurrentDictionary<TcpSession, SessionHandler> sessions = new();
 
-    public TcpServer(Dispatcher<Command> commandDispatcher)
+    public TcpServer(Dispatcher<Command> commandDispatcher, Database database)
     {
         this.commandDispatcher = commandDispatcher;
+        this.database = database;
     }
 
     public async Task StartAsync()
@@ -63,6 +65,7 @@ public class TcpServer : IDisposable
         {
             Command cmd = CommandParser.Parse(msg);
             cmd.Session = session;
+            cmd.Database = database;
             commandDispatcher.Add(cmd);
         };
 
@@ -90,19 +93,5 @@ public class TcpServer : IDisposable
             this.handler = handler;
             this.task = task;
         }
-    }
-    private static string GetLocalIPAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-
-        // Look for an IPv4 address that is not loopback
-        foreach (var ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
-            {
-                return ip.ToString();
-            }
-        }
-        return null;
     }
 }

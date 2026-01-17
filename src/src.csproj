@@ -9,8 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
-    <PackageReference Include="Oracle.ManagedDataAccess" Version="23.26.0" />
     <PackageReference Include="WorkDispatcher" Version="1.0.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="database.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
 
+    <None Update="database_config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  </ItemGroup>
 </Project>
