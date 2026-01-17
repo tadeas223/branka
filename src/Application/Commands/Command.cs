@@ -59,11 +59,11 @@ public abstract class Command: IWorkerTask
         catch (BankException e)
         {
             Session.WriteLine($"ER {e.Message}");
-            Log.Error($"{Session.Socket.RemoteEndPoint} bank error: {e}");
+            Log.Error($"{Session.Socket.RemoteEndPoint} remote bank retured an error that said \"{e}\" ");
         }
         catch (DatabaseException e)
         {
-            Session.WriteLine($"ER something went wrong with the database: {e.Message}");
+            Session.WriteLine($"ER {e.Message}");
             Log.Error($"{Session.Socket.RemoteEndPoint} database error: {e}");
         }
         catch(Exception e)

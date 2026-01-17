@@ -13,19 +13,20 @@ namespace Presentation;
 
 public class TcpServer : IDisposable
 {
-    public static readonly int PORT=5000;
-
+    TcpServerConfig config;
     CancellationTokenSource cts = new();
-    TcpListener socketListener = new TcpListener(IPAddress.Any, PORT);
+    TcpListener socketListener;
     Dispatcher<Command> commandDispatcher;
     Database database;
 
     ConcurrentDictionary<TcpSession, SessionHandler> sessions = new();
 
-    public TcpServer(Dispatcher<Command> commandDispatcher, Database database)
+    public TcpServer(Dispatcher<Command> commandDispatcher, Database database, TcpServerConfig config = default)
     {
         this.commandDispatcher = commandDispatcher;
         this.database = database;
+        this.config = config;
+        socketListener = new TcpListener(IPAddress.Any, config.Port);
     }
 
     public async Task StartAsync()
@@ -58,7 +59,10 @@ public class TcpServer : IDisposable
 
     public void RegisterSession(TcpSession session)
     {
-        SessionHandler handler = new SessionHandler(this, session);
+        SessionHandler handler = new SessionHandler(this, session)
+        {
+            Timeout = config.ClientTimeout
+        };
         sessions[session] = handler;
 
         handler.OnMessageReceived += (msg) => 

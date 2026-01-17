@@ -5,6 +5,7 @@ using Application.Models;
 using Presentation;
 using Utils;
 using WorkDispatcher;
+using System.Reflection;
 
 Log.Instance.FilePath = "logs.txt";
 
@@ -20,5 +21,11 @@ if(!Database.Exists(credentials))
 
 using Database database = new Database(credentials);
 
-TcpServer server = new(dispatcher, database);
+TcpServerConfig config = new TcpServerConfig
+{
+    Port = 5000,
+    ClientTimeout = 30
+};
+
+TcpServer server = new(dispatcher, database, config);
 await server.StartAsync();

@@ -5,6 +5,8 @@ namespace Application.Models;
 public class Account
 {
     public int Id {get; set;}
+
+    private long balance;
     public long Balance {
         set
         {
@@ -12,11 +14,11 @@ public class Account
             {
                 throw new BankException("account balance cannot be negative");
             }
-            Balance = value;
+            balance = value;
         }
         get
         {
-            return Balance;
+            return balance;
         }
     }
     public string? Ip {get; set;}

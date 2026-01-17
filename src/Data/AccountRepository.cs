@@ -9,17 +9,30 @@ public class AccountRepository
     private Database database;
 
     
-    public int Count
+    public int ClientCount
     {
         get
         {
-            using var command = new SqlCommand("SELECT COUNT(account_id) as num FROM account", database.Connection);
+            using var command = new SqlCommand("SELECT COUNT(id) as num FROM account_table", database.Connection);
             using var reader = command.ExecuteReader();
             if(reader.Read())
             {
                 return reader.GetInt32(0);
             }
             throw new DatabaseException("sql command failed execution");
+        }
+    }
+
+    public long TotalBalance
+    {
+        get {
+            using var command = new SqlCommand("SELECT SUM(balance) as num FROM account_table", database.Connection);
+            using var reader = command.ExecuteReader();
+            if(reader.Read())
+            {
+                return reader.GetInt64(0);
+            }
+            throw new DatabaseException("failed to calculate total balance");
         }
     }
 
@@ -63,6 +76,14 @@ public class AccountRepository
             };
         }
         throw new DatabaseException($"Account with id {id} not found"); 
+    }
+
+    public void Delete(Account account)
+    {
+        using var command = new SqlCommand("DELETE FROM account_table WHERE id = @id", database.Connection);
+        command.Parameters.AddWithValue("@id", account.Id);
+
+        command.ExecuteNonQuery();
     }
 
 }

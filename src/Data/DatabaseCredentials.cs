@@ -1,3 +1,5 @@
+namespace Data;
+
 using Microsoft.Data.SqlClient;
 using System.Text.Json;
 using System.Text.Json.Serialization;

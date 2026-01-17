@@ -17,6 +17,11 @@ public static class CommandParser
             commands.Add("BC", typeof(BcCommand));
             commands.Add("AC", typeof(AcCommand));
             commands.Add("AD", typeof(AdCommand));
+            commands.Add("AW", typeof(AwCommand));
+            commands.Add("AB", typeof(AbCommand));
+            commands.Add("AR", typeof(ArCommand));
+            commands.Add("BA", typeof(BaCommand));
+            commands.Add("BN", typeof(BnCommand));
         }
 
         string[] args = cmdString.Split(' ');

@@ -107,4 +107,26 @@ public class BankConnection
 
         return long.Parse(split[1]);
     }
+    
+    public void AD(int id)
+    {
+        using TcpClient client = new TcpClient(ip, PORT);
+        using var writer = new StreamWriter(client.GetStream());
+        using var reader = new StreamReader(client.GetStream());
+
+        writer.WriteLine($"AD {id}/{ip}");
+        writer.Flush();
+
+        string? line = reader.ReadLine();
+        if(line == null)
+        {
+            throw new IOException("failed to read response");
+        } 
+
+        string[] split = line.Split(" ");
+        if(split[0] == "ER")
+        {
+            throw new Exception(split[1]);
+        }
+    }
 }
