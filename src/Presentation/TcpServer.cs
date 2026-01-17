@@ -40,7 +40,7 @@ public class TcpServer : IDisposable
         socketListener.Stop();
     }
 
-    public void TerminateSession(TcpSession session)
+    public void TerminateSession(TcpSession session, string reason)
     {
         SessionHandler? sessionHandler;
         sessions.Remove(session, out sessionHandler);
@@ -53,7 +53,7 @@ public class TcpServer : IDisposable
 
         sessionHandler.Dispose();
 
-        Log.Info($"session terminated: {session.Socket.RemoteEndPoint}");
+        Log.Info($"session {session.Socket.RemoteEndPoint}: terminated reason {reason}");
     }
 
     public void RegisterSession(TcpSession session)
@@ -71,7 +71,7 @@ public class TcpServer : IDisposable
 
         handler.Start();
 
-        Log.Info($"session registered: {session.Socket.RemoteEndPoint}");
+        Log.Info($"session {session.Socket.RemoteEndPoint} registered");
     }
 
     public void Dispose()

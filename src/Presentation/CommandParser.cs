@@ -23,7 +23,7 @@ public static class CommandParser
         switch(name.ToUpper())
         {
             case "BR":
-            cmd = new BrCommand();
+            cmd = new BcCommand();
             break;
 
             default:

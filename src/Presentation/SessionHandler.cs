@@ -31,46 +31,44 @@ public class SessionHandler : IDisposable
         task = StartAsync();
     }
 
-    private async Task StartAsync()
+private async Task StartAsync()
+{
+    var bufferTemp = new byte[512];
+
+    while (!cts.Token.IsCancellationRequested)
     {
-        byte[] temp = new byte[512];
+        using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(Timeout));
+        using var linkedCts =
+            CancellationTokenSource.CreateLinkedTokenSource(cts.Token, timeoutCts.Token);
 
-        Stopwatch stopwatch = new Stopwatch();
-        
-        while (!cts.Token.IsCancellationRequested)
+        int bytesRead;
+        try
         {
-            stopwatch.Start();
-
-            if(!session.Connected)
-            {
-                server.TerminateSession(session);
-                break;
-            }
-
-            Task<int> readTask = stream.ReadAsync(temp, 0, temp.Length);
-            Task completedTask = await Task.WhenAny(readTask, Task.Delay(Timeout * 1000));
-
-            if(completedTask != readTask)
-            {
-                server.TerminateSession(session);
-                break;
-            }
-
-            int bytesRead = await readTask;
-
-            if (bytesRead == 0)
-            {
-                server.TerminateSession(session);
-                break;
-            }
-
-            buffer.Write(temp, 0, bytesRead);
-
-            ProcessBuffer();
-
-            stopwatch.Reset();
+            bytesRead = await stream.ReadAsync(bufferTemp, linkedCts.Token);
         }
+        catch (OperationCanceledException)
+        {
+            server.TerminateSession(session, "read timeout");
+            break;
+        }
+        catch (IOException)
+        {
+            server.TerminateSession(session, "connection closed");
+            break;
+        }
+
+        if (bytesRead == 0)
+        {
+            server.TerminateSession(session, "connection closed");
+            break;
+        }
+
+        buffer.Write(bufferTemp, 0, bytesRead);
+        ProcessBuffer();
     }
+}
+
+
 
     private void ProcessBuffer()
     {

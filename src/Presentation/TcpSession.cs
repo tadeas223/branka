@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
-
+using Utils;
 
 namespace Presentation;
 
@@ -15,7 +15,8 @@ public class TcpSession : IDisposable
     {
         get
         {
-            return !(Socket.Poll(0, SelectMode.SelectRead) && Socket.Available == 0);
+            bool poll = !(Socket.Poll(0, SelectMode.SelectRead) && Socket.Available == 0);
+            return poll;
         }
     }
 
@@ -48,7 +49,7 @@ public class TcpSession : IDisposable
 
     public void Dispose()
     {
-        Server.TerminateSession(this);
+        Server.TerminateSession(this, "unknown");
     }
 
     public override bool Equals(object? obj)
