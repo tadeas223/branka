@@ -1,8 +1,6 @@
-using System.Data.Common;
-using System.Net.Sockets;
-using Microsoft.VisualBasic;
+namespace P2PBank.Application;
 
-namespace Application;
+using System.Net.Sockets;
 
 public class BankConnection
 {

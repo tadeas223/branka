@@ -1,13 +1,15 @@
-namespace Data;
+namespace P2PBank.Data.MicrosoftSql;
 
-using Application.Models;
 using Microsoft.Data.SqlClient;
-using Utils;
 
-public class AccountRepository
+using P2PBank.Data.Interface;
+using Application.Interface.Models;
+using P2PBank.Utils;
+
+public class MicrosoftSqlAccountRepository: IAccountRepository
 {
-    private Database database;
-
+    private MicrosoftSqlDatabase database;
+    private Log log;
     
     public int ClientCount
     {
@@ -36,13 +38,15 @@ public class AccountRepository
         }
     }
 
-    public AccountRepository(Database database)
+    public MicrosoftSqlAccountRepository(MicrosoftSqlDatabase database, Log log)
     {
         this.database = database;
+        this.log = log;
     }
 
     public void Insert(Account account)
     {
+        log.Info($"creating account");
         using var command = new SqlCommand(
             "INSERT INTO account_table(balance) VALUES (@balance); SELECT CAST(SCOPE_IDENTITY() AS INT)",
             database.Connection
@@ -50,7 +54,7 @@ public class AccountRepository
         command.Parameters.AddWithValue("@balance", account.Balance);
         account.Id = (int)command.ExecuteScalar();
 
-        Log.Info($"created account {account}");
+        log.Info($"created account {account}");
     }
     
     public void Update(Account oldAccount, Account newAccount)

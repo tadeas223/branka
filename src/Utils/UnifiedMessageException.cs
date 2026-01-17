@@ -1,4 +1,4 @@
-namespace Utils;
+namespace P2PBank.Utils;
 
 class UnifiedMessageException: Exception
 {

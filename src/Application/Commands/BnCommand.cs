@@ -1,22 +1,24 @@
-using System.Net;
-using System.Net.Sockets;
-using Presentation;
-using Utils;
-using Data;
-using Application.Models;
-using System.Xml;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Data.Interface;
+using P2PBank.Utils;
 
 public class BnCommand : Command
 {
+    private IAccountRepository accountRepository;
+
+    public BnCommand(IAccountRepository accountRepository, Log log): base(log)
+    {
+        Name = "BN";
+        this.accountRepository = accountRepository;
+    }
 
     public override void InternalExecute()
     {
         EnsusreParams(0);
 
-        AccountRepository accRepo = new(Database);
-        int clients = accRepo.ClientCount;
+        int clients = accountRepository.ClientCount;
 
         Session.WriteLine($"BN {clients}");
     }

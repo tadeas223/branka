@@ -1,12 +1,15 @@
-using System.Net;
-using System.Net.Sockets;
-using Presentation;
-using Utils;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Utils;
+using P2PBank.Data.Interface;
 
 public class BcCommand : Command
 {
+    public BcCommand(Log log) : base(log)
+    {
+        Name = "BC";
+    }
 
     public override void InternalExecute()
     {

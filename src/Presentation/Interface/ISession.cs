@@ -1,4 +1,4 @@
-namespace P2PBank.Presentation.Interfaces;
+namespace P2PBank.Presentation.Interface;
 
 public interface ISession: IDisposable
 {

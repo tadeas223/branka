@@ -1,6 +1,4 @@
-using Utils;
-
-namespace Application.Models;
+namespace P2PBank.Application.Interface.Models;
 
 public class Account
 {

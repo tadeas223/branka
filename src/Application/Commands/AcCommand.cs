@@ -1,21 +1,28 @@
-using Data;
-using Application.Models;
-using Utils;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Utils;
+using P2PBank.Data.Interface;
+using P2PBank.Application.Interface.Models;
+using P2PBank.Application.Interface;
 
 public class AcCommand: Command
 {
+    private IAccountRepository accountRepository;
+
+    public AcCommand(IAccountRepository accountRepository, Log log) : base(log)
+    {
+        Name = "AC";
+        this.accountRepository = accountRepository;
+    }
+
     public override void InternalExecute()
     {
         EnsusreParams(0);
 
-        AccountRepository accRepo = new(Database);
         Account account = new();
         account.Ip = UtilFuncs.GetLocalIPAddress();
 
-        accRepo.Insert(account);
-
+        accountRepository.Insert(account);
 
         Session.WriteLine($"AC {account}");
     }

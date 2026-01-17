@@ -1,23 +1,24 @@
+namespace P2PBank.Application.Commands;
 
-using System.Net;
-using System.Net.Sockets;
-using Presentation;
-using Utils;
-using Data;
-using Application.Models;
-using System.Xml;
-
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Data.Interface;
+using P2PBank.Utils;
 
 public class BaCommand : Command
 {
+    private IAccountRepository accountRepository;
+
+    public BaCommand(IAccountRepository accountRepository, Log log) : base(log)
+    {
+        Name = "BA";
+        this.accountRepository = accountRepository;
+    }
 
     public override void InternalExecute()
     {
         EnsusreParams(0);
 
-        AccountRepository accRepo = new(Database);
-        long balance = accRepo.TotalBalance;
+        long balance = accountRepository.TotalBalance;
 
         Session.WriteLine($"BA {balance}");
     }

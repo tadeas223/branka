@@ -1,18 +1,17 @@
-using Presentation;
-using WorkDispatcher;
-using Data;
-using Utils;
+namespace P2PBank.Application.Interface;
 
-namespace Application.Commands;
+using P2PBank.Presentation.Interface;
+using P2PBank.Utils;
+
+using WorkDispatcher;
 
 public abstract class Command: IWorkerTask
 {
     public List<string> Params {get; set;} = new();
-
-    private TcpSession? session = null;
-    private Database? database = null;
-
-    public TcpSession Session
+    public string? Name {get; protected set;}
+    protected Log log;
+    private ISession? session = null;
+    public ISession Session
     {
         get
         {
@@ -29,24 +28,11 @@ public abstract class Command: IWorkerTask
         }
     }
     
-    public Database Database
+    public Command(Log log)
     {
-        get
-        {
-            if(database== null)
-            {
-                throw new NullReferenceException("database was not set");
-            }
-            return database;
-        }
-
-        set
-        {
-            database = value;
-        }
+        Name = null;
+        this.log = log;
     }
-
-    public Command(){}
 
     public abstract void InternalExecute();
 
@@ -59,12 +45,11 @@ public abstract class Command: IWorkerTask
         catch (UnifiedMessageException e)
         {
             Session.WriteLine($"ER {e.Message}");
-            Log.Info($"{Session.Socket.RemoteEndPoint} {e}");
         }
         catch(Exception e)
         {
             Session.WriteLine("ER Uncaugnt internal error.");
-            Log.Error($"{Session.Socket.RemoteEndPoint} uncaught internal error: {e}");
+            log.Error(e.ToString());
         }
     }
 

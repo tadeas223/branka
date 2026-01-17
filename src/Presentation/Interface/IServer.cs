@@ -1,9 +1,8 @@
-namespace P2PBank.Presentation.Interfaces;
+namespace P2PBank.Presentation.Interface;
 
 public interface IServer: IDisposable
 {
     public Task StartAsync();
-    public void Start();
     public void RegisterSession(ISession session);
     public void TerminateSession(ISession session, string reason);
 }

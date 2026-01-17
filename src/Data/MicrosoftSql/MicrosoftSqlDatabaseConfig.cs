@@ -1,25 +1,34 @@
-namespace Data;
+namespace P2PBank.Data.MicrosoftSql;
 
 using Microsoft.Data.SqlClient;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using P2PBank.Data.Interface;
+using P2PBank.Utils;
+
 /// <summary>
 /// Represents login credentials for the database.
 /// </summary>
-public class DatabaseCredentials
+public class MicrosoftSqlDatabaseConfig : DatabaseConfig
 {
     public string Username { set; get; }
     public string Password { set; get; }
     public string DatabaseName { set; get; }
     public string Url { set;get; }
 
-    public DatabaseCredentials()
+    public override Config DefaultConfig 
     {
-        Username = "<username>";
-        Password = "<password>";
-        DatabaseName = "<database>";
-        Url = "<url>";
+        get
+        {
+            return new MicrosoftSqlDatabaseConfig
+            {
+                Username = "<username>",
+                Password = "<password>",
+                DatabaseName = "<database>",
+                Url = "<url>"
+            };
+        }
     }
 
     /// <summary>
@@ -55,10 +64,18 @@ public class DatabaseCredentials
         }
     }
     
+    public MicrosoftSqlDatabaseConfig()
+    {
+        Username = "<username>";
+        Password = "<password>";
+        DatabaseName = "<database>";
+        Url = "<url>";
+    }
+    
     /// <summary>
     /// Creates the credentials ands sets its variables idk.
     /// </summary>
-    public DatabaseCredentials(string url, string databaseName, string username, string password) 
+    public MicrosoftSqlDatabaseConfig(string url, string databaseName, string username, string password) 
     {
         Username = username;
         Password = password;
@@ -71,9 +88,9 @@ public class DatabaseCredentials
     /// </summary>
     /// <param name="json">Json that represents the credentials.</param>
     /// <returns>Credentials from json</returns>
-    public static DatabaseCredentials FromJson(string json)
+    public static MicrosoftSqlDatabaseConfig Deserialize(string json)
     {
-        DatabaseCredentials? result = JsonSerializer.Deserialize<DatabaseCredentials>(json);
+        MicrosoftSqlDatabaseConfig? result = JsonSerializer.Deserialize<MicrosoftSqlDatabaseConfig>(json);
         if(result == null) throw new JsonException("Failed to parse credentials");
         return result;
     }
@@ -82,7 +99,7 @@ public class DatabaseCredentials
     /// Converts <see cref="DatabaseCredentials"/> to json.
     /// </summary>
     /// <returns>String with the json</returns>
-    public string ToJson()
+    public override string Serialize()
     {
         return JsonSerializer.Serialize(this);
     }

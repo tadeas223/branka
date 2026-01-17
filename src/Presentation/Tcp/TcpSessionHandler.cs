@@ -10,18 +10,20 @@ public class TcpSessionHandler : IDisposable
     private TcpSession session;
     private TcpServer server;
     private NetworkStream stream;
+    private Log log;
 
     private Task? task;
     private CancellationTokenSource cts = new();
 
     public event Action<string>? OnMessageReceived;
 
-    public int Timeout {get; set;} = 5;
+    public int Timeout {get; set;}
 
-    public TcpSessionHandler(TcpServer server, TcpSession session)
+    public TcpSessionHandler(TcpServer server, TcpSession session, Log log)
     {
         this.server = server;
         this.session = session;
+        this.log = log;
         stream = new NetworkStream(session.Socket, ownsSocket: false);
         buffer = new MemoryStream();
     }
@@ -49,6 +51,11 @@ public class TcpSessionHandler : IDisposable
             catch (OperationCanceledException)
             {
                 server.TerminateSession(session, "read timeout");
+                break;
+            }
+            catch (ObjectDisposedException)
+            {
+                server.TerminateSession(session, "connection closed");
                 break;
             }
             catch (IOException)
@@ -82,7 +89,7 @@ public class TcpSessionHandler : IDisposable
         {
             lastPos = (int)reader.BaseStream.Position;
             OnMessageReceived?.Invoke(line);
-            Log.Info($"{session.Socket.RemoteEndPoint} sent: {line}");
+            log.Info($"{session.Socket.RemoteEndPoint} sent: {line}");
         }
 
         byte[] remaining = buffer.ToArray()[lastPos..];

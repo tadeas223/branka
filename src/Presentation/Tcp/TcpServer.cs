@@ -1,55 +1,45 @@
 namespace P2PBank.Presentation.Tcp;
 
-using Data;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
-using Application;
-using Application.Commands;
-using Utils;
+
 using WorkDispatcher;
-using P2PBank.Presentation.Interfaces;
+
+using P2PBank.Presentation.Interface;
+using P2PBank.Application.Interface;
+using P2PBank.Utils;
 
 public class TcpServer : IServer
 {
     private TcpServerConfig config;
     private CancellationTokenSource cts = new();
     private Dispatcher<Command> commandDispatcher;
+    private Log log;
+    private ICommandFactory commandFactory;
 
     ConcurrentDictionary<TcpSession, TcpSessionHandler> sessions = new();
 
-    public TcpServer(Dispatcher<Command> commandDispatcher, IServerConfig? config = null)
+    public TcpServer(Dispatcher<Command> commandDispatcher, Log log, ICommandFactory commandFactory, ServerConfig? config = null)
     {
         this.commandDispatcher = commandDispatcher;
+        this.commandFactory = commandFactory;
 
         if(config == null)
         {
-            this.config = new TcpServerConfig();
+            this.config = (new TcpServerConfig().DefaultConfig as TcpServerConfig)!;
         }
 
         TcpServerConfig? tcpConfig = config as TcpServerConfig;
         if(tcpConfig == null)
         {
-            Log.Error("TcpServer got incompatable configuration, setting to default");
+            log.Error("TcpServer got incompatable configuration, setting to default");
         }
 
         this.config = tcpConfig!;
+        this.log = log;
     }
     
-    public void Start()
-    {
-        using TcpListener socketListener = new(IPAddress.Any, config.Port);
-        socketListener.Start();
-        while(!cts.Token.IsCancellationRequested)
-        {
-            Socket socket = socketListener.AcceptSocket();
-            
-            TcpSession session = new TcpSession(socket);
-            RegisterSession(session);
-        }
-        socketListener.Stop();
-    }
-
     public async Task StartAsync()
     {
         using TcpListener socketListener = new(IPAddress.Any, config.Port);
@@ -69,7 +59,7 @@ public class TcpServer : IServer
         TcpSession? tcpSession = session as TcpSession;
         if(tcpSession == null)
         {
-            Log.Warn($"attempted to terminate an invalid session class, session was propably LEAKED");
+            log.Warn($"attempted to terminate an invalid session class, session was propably LEAKED");
             return;
         }
 
@@ -77,13 +67,13 @@ public class TcpServer : IServer
         sessions.Remove(tcpSession, out sessionHandler);
         if(sessionHandler == null)
         {
-            Log.Warn($"session {tcpSession.Socket.RemoteEndPoint} was not registered with this server, session handler is LEAKED");
+            log.Warn($"session {tcpSession.Socket.RemoteEndPoint} was not registered with this server, session handler is LEAKED");
             return;
         }
 
         sessionHandler.Dispose();
 
-        Log.Info($"session {tcpSession.Socket.RemoteEndPoint}: terminated reason {reason}");
+        log.Info($"session {tcpSession.Socket.RemoteEndPoint}: terminated reason {reason}");
     }
 
     public void RegisterSession(ISession session)
@@ -91,11 +81,11 @@ public class TcpServer : IServer
         TcpSession? tcpSession = session as TcpSession;
         if(tcpSession == null)
         {
-            Log.Warn($"attempted to register an invalid session class, is not registered");
+            log.Warn($"attempted to register an invalid session class, is not registered");
             return;
         }
 
-        TcpSessionHandler handler = new TcpSessionHandler(this, tcpSession)
+        TcpSessionHandler handler = new TcpSessionHandler(this, tcpSession, log)
         {
             Timeout = config.ClientTimeout
         };
@@ -103,14 +93,24 @@ public class TcpServer : IServer
 
         handler.OnMessageReceived += (msg) => 
         {
-            Command cmd = CommandParser.Parse(msg);
-            cmd.Session = tcpSession;
-            commandDispatcher.Add(cmd);
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    Command cmd = commandFactory.Create(msg);
+                    cmd.Session = tcpSession;
+                    commandDispatcher.Add(cmd);
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Command processing failed: {ex}");
+                }
+            });
         };
 
         handler.Start();
 
-        Log.Info($"session {tcpSession.Socket.RemoteEndPoint} registered");
+        log.Info($"session {tcpSession.Socket.RemoteEndPoint} registered");
     }
 
     public void Dispose()

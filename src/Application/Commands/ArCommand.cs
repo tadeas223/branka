@@ -1,15 +1,20 @@
-using System.Net;
-using System.Net.Sockets;
-using Presentation;
-using Utils;
-using Data;
-using Application.Models;
-using System.Data.Common;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Utils;
+using P2PBank.Application;
+using P2PBank.Data.Interface;
+using P2PBank.Application.Interface.Models;
 
 public class ArCommand : Command
 {
+    private IAccountRepository accountRepository;
+
+    public ArCommand(IAccountRepository accountRepository, Log log) : base(log)
+    {
+        Name = "AR";
+        this.accountRepository = accountRepository;
+    }
 
     public override void InternalExecute()
     {
@@ -24,9 +29,8 @@ public class ArCommand : Command
 
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
-            var accRepo = new AccountRepository(Database);
-            Account acc = accRepo.SelectById(id);
-            accRepo.Delete(acc);
+            Account acc = accountRepository.SelectById(id);
+            accountRepository.Delete(acc);
         }
         else
         {

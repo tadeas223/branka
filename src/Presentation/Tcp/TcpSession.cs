@@ -2,7 +2,7 @@ namespace P2PBank.Presentation.Tcp;
 
 using System.Net.Sockets;
 using System.Text;
-using P2PBank.Presentation.Interfaces;
+using P2PBank.Presentation.Interface;
 
 public class TcpSession : ISession
 {

@@ -1,14 +1,19 @@
-using System.Net;
-using System.Net.Sockets;
-using Application.Models;
-using Data;
-using Presentation;
-using Utils;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Utils;
+using P2PBank.Data.Interface;
+using P2PBank.Application.Interface.Models;
 
 public class AdCommand : Command
 {
+    private IAccountRepository accountRepository;
+
+    public AdCommand(IAccountRepository accountRepository, Log log) : base(log)
+    {
+        Name = "AD";
+        this.accountRepository = accountRepository;
+    }
 
     public override void InternalExecute()
     {
@@ -24,11 +29,10 @@ public class AdCommand : Command
         long deposit = long.Parse(Params[1]);
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
-            var accRepo = new AccountRepository(Database);
             Account acc;
             try
             {
-                acc = accRepo.SelectById(id);
+                acc = accountRepository.SelectById(id);
             }
             catch
             {
@@ -37,7 +41,7 @@ public class AdCommand : Command
 
             try
             {
-                accRepo.Update(acc, new Account
+                accountRepository.Update(acc, new Account
                 {
                     Id = id,
                     Balance = acc.Balance + deposit

@@ -1,8 +1,7 @@
+namespace P2PBank.Utils;
+
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-
-namespace Utils;
 
 public static class UtilFuncs
 {    

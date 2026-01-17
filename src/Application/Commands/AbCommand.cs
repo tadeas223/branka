@@ -1,11 +1,19 @@
-using Data;
-using Application.Models;
-using Utils;
+namespace P2PBank.Application.Commands;
 
-namespace Application.Commands;
+using P2PBank.Application.Interface;
+using P2PBank.Utils;
+using P2PBank.Data.Interface;
+using P2PBank.Application.Interface.Models;
 
 public class AbCommand: Command
 {
+    private IAccountRepository accountRepository;
+    public AbCommand(IAccountRepository accountRepository, Log log) : base(log)
+    {
+        Name = "AB";
+        this.accountRepository = accountRepository;
+    }
+
     public override void InternalExecute()
     {
         EnsusreParams(1);
@@ -23,8 +31,7 @@ public class AbCommand: Command
         {
             try
             {
-                var accRepo = new AccountRepository(Database);
-                Account acc = accRepo.SelectById(id);
+                Account acc = accountRepository.SelectById(id);
                 balance = acc.Balance;
             }
             catch
