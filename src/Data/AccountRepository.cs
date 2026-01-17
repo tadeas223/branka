@@ -19,7 +19,7 @@ public class AccountRepository
             {
                 return reader.GetInt32(0);
             }
-            throw new DatabaseException("sql command failed execution");
+            throw new Exception("sql command failed execution");
         }
     }
 
@@ -32,7 +32,7 @@ public class AccountRepository
             {
                 return reader.GetInt64(0);
             }
-            throw new DatabaseException("failed to calculate total balance");
+            throw new Exception("failed to calculate total balance");
         }
     }
 
@@ -75,7 +75,7 @@ public class AccountRepository
                 Balance = reader.GetInt64(1)
             };
         }
-        throw new DatabaseException($"Account with id {id} not found"); 
+        throw new Exception($"Account with id {id} not found"); 
     }
 
     public void Delete(Account account)

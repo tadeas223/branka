@@ -8,15 +8,29 @@ public class AbCommand: Command
 {
     public override void InternalExecute()
     {
-        (int id, string ip) = UtilFuncs.ParseAccountStr(Params[0]);
+        EnsusreParams(1);
+
+        (int, string)? accountTuple = UtilFuncs.ParseAccountStr(Params[0]);
+        if(!accountTuple.HasValue)
+        {
+            throw new UnifiedMessageException("Invalid account format.");
+        }
+        (int id, string ip) = accountTuple.Value;
 
         long balance = 0;
 
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
-            var accRepo = new AccountRepository(Database);
-            Account acc = accRepo.SelectById(id);
-            balance = acc.Balance;
+            try
+            {
+                var accRepo = new AccountRepository(Database);
+                Account acc = accRepo.SelectById(id);
+                balance = acc.Balance;
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Account was not found.");
+            }
         }
         else
         {

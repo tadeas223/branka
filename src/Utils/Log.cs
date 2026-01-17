@@ -25,7 +25,7 @@ public class Log
 
     public void _Warn(string msg)
     {
-        string text = $"[{DateTime.Now} warn] {msg}\n";
+        string text = $"[{DateTime.Now}  warn] {msg}\n";
         
         Console.Write(text);
         WriteToFile(FilePath, text);
@@ -33,7 +33,7 @@ public class Log
 
     public void _Info(string msg)
     {
-        string text = $"[{DateTime.Now} info] {msg}\n";
+        string text = $"[{DateTime.Now}  info] {msg}\n";
         
         Console.Write(text);
         WriteToFile(FilePath, text);
@@ -70,7 +70,7 @@ public class Log
             }
             catch
             {
-                Console.WriteLine($"[{DateTime.Now}error]: failed to write save log");
+                Console.WriteLine($"[{DateTime.Now} error]: failed to write save log");
             }
         }
 

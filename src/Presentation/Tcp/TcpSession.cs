@@ -1,14 +1,12 @@
+namespace P2PBank.Presentation.Tcp;
+
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using Utils;
+using P2PBank.Presentation.Interfaces;
 
-namespace Presentation;
-
-public class TcpSession : IDisposable
+public class TcpSession : ISession
 {
     public Socket Socket {get; private set;}
-    public TcpServer Server {get; private set;}
     public Guid SessionId {get; private set;}
     
     public bool Connected
@@ -20,9 +18,8 @@ public class TcpSession : IDisposable
         }
     }
 
-    public TcpSession(TcpServer server, Socket socket)
+    public TcpSession(Socket socket)
     {
-        Server = server;
         Socket = socket;
         SessionId = Guid.NewGuid();
     }
@@ -57,15 +54,8 @@ public class TcpSession : IDisposable
         await WriteAsync(msg);
     }
 
-
-    public void Register()
-    {
-        Server.RegisterSession(this);
-    }
-
     public void Dispose()
     {
-        Server.TerminateSession(this, "unknown");
         Socket.Close();
         Socket.Dispose();
     }

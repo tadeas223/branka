@@ -14,6 +14,8 @@ public class BaCommand : Command
 
     public override void InternalExecute()
     {
+        EnsusreParams(0);
+
         AccountRepository accRepo = new(Database);
         long balance = accRepo.TotalBalance;
 

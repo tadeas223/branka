@@ -56,20 +56,23 @@ public abstract class Command: IWorkerTask
         {
             InternalExecute();
         }
-        catch (BankException e)
+        catch (UnifiedMessageException e)
         {
             Session.WriteLine($"ER {e.Message}");
-            Log.Error($"{Session.Socket.RemoteEndPoint} remote bank retured an error that said \"{e}\" ");
-        }
-        catch (DatabaseException e)
-        {
-            Session.WriteLine($"ER {e.Message}");
-            Log.Error($"{Session.Socket.RemoteEndPoint} database error: {e}");
+            Log.Info($"{Session.Socket.RemoteEndPoint} {e}");
         }
         catch(Exception e)
         {
-            Session.WriteLine("ER uncaugnt internal error");
+            Session.WriteLine("ER Uncaugnt internal error.");
             Log.Error($"{Session.Socket.RemoteEndPoint} uncaught internal error: {e}");
+        }
+    }
+
+    public void EnsusreParams(int paramCount)
+    {
+        if(Params.Count != paramCount)
+        {
+            throw new UnifiedMessageException("Invalid number of arguments.");
         }
     }
 }

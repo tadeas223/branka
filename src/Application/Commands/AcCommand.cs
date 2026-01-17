@@ -8,10 +8,12 @@ public class AcCommand: Command
 {
     public override void InternalExecute()
     {
+        EnsusreParams(0);
+
         AccountRepository accRepo = new(Database);
         Account account = new();
         account.Ip = UtilFuncs.GetLocalIPAddress();
-        
+
         accRepo.Insert(account);
 
 

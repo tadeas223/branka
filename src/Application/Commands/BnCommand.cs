@@ -13,6 +13,8 @@ public class BnCommand : Command
 
     public override void InternalExecute()
     {
+        EnsusreParams(0);
+
         AccountRepository accRepo = new(Database);
         int clients = accRepo.ClientCount;
 

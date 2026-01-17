@@ -12,18 +12,41 @@ public class AdCommand : Command
 
     public override void InternalExecute()
     {
-        (int id, string ip) = UtilFuncs.ParseAccountStr(Params[0]);
+        EnsusreParams(1);
+        
+        (int, string)? accountTuple = UtilFuncs.ParseAccountStr(Params[0]);
+        if(!accountTuple.HasValue)
+        {
+            throw new UnifiedMessageException("Invalid account format.");
+        }
+        (int id, string ip) = accountTuple.Value;
 
         long deposit = long.Parse(Params[1]);
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
             var accRepo = new AccountRepository(Database);
-            Account acc = accRepo.SelectById(id);
-            accRepo.Update(acc, new Account
+            Account acc;
+            try
             {
-                Id = id,
-                Balance = acc.Balance + deposit
-            });
+                acc = accRepo.SelectById(id);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Account was not found.");
+            }
+
+            try
+            {
+                accRepo.Update(acc, new Account
+                {
+                    Id = id,
+                    Balance = acc.Balance + deposit
+                });
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Failed to deposit.");
+            }
         }
         else
         {

@@ -1,8 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
 using Application.Commands;
-using Application;
 
-namespace Presentation;
+namespace Application;
 
 public static class CommandParser
 {
@@ -29,7 +27,7 @@ public static class CommandParser
         if(args.Length < 1)
         {
             Command erCmd = new ErCommand();
-            erCmd.Params.Add("failed to parse command name");
+            erCmd.Params.Add("Failed to parse command name.");
             return erCmd;
         }
 
@@ -40,7 +38,7 @@ public static class CommandParser
         if(!commands.ContainsKey(name))
         {
             Command erCmd = new ErCommand();
-            erCmd.Params.Add("unknown command");
+            erCmd.Params.Add("Command does not exist.");
             return erCmd;
         }
         
@@ -48,7 +46,7 @@ public static class CommandParser
         if(cmd == null)
         {
             Command erCmd = new ErCommand();
-            erCmd.Params.Add("failed to create command through reflection");
+            erCmd.Params.Add("Could not execute command because of an internal error.");
             return erCmd;
         }
         cmd.Params.AddRange(argList);

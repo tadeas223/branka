@@ -1,10 +1,10 @@
+namespace P2PBank.Presentation.Tcp;
+
 using System.Net.Sockets;
 using System.Text;
-using Presentation;
 using Utils;
-using System.Diagnostics;
 
-public class SessionHandler : IDisposable
+public class TcpSessionHandler : IDisposable
 {
     private MemoryStream buffer;
     private TcpSession session;
@@ -18,7 +18,7 @@ public class SessionHandler : IDisposable
 
     public int Timeout {get; set;} = 5;
 
-    public SessionHandler(TcpServer server, TcpSession session)
+    public TcpSessionHandler(TcpServer server, TcpSession session)
     {
         this.server = server;
         this.session = session;
@@ -31,42 +31,42 @@ public class SessionHandler : IDisposable
         task = StartAsync();
     }
 
-private async Task StartAsync()
-{
-    var bufferTemp = new byte[512];
-
-    while (!cts.Token.IsCancellationRequested)
+    private async Task StartAsync()
     {
-        using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(Timeout));
-        using var linkedCts =
-            CancellationTokenSource.CreateLinkedTokenSource(cts.Token, timeoutCts.Token);
+        var bufferTemp = new byte[512];
 
-        int bytesRead;
-        try
+        while (!cts.Token.IsCancellationRequested)
         {
-            bytesRead = await stream.ReadAsync(bufferTemp, linkedCts.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            server.TerminateSession(session, "read timeout");
-            break;
-        }
-        catch (IOException)
-        {
-            server.TerminateSession(session, "connection closed");
-            break;
-        }
+            using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(Timeout));
+            using var linkedCts =
+                CancellationTokenSource.CreateLinkedTokenSource(cts.Token, timeoutCts.Token);
 
-        if (bytesRead == 0)
-        {
-            server.TerminateSession(session, "connection closed");
-            break;
-        }
+            int bytesRead;
+            try
+            {
+                bytesRead = await stream.ReadAsync(bufferTemp, linkedCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                server.TerminateSession(session, "read timeout");
+                break;
+            }
+            catch (IOException)
+            {
+                server.TerminateSession(session, "connection closed");
+                break;
+            }
 
-        buffer.Write(bufferTemp, 0, bytesRead);
-        ProcessBuffer();
+            if (bytesRead == 0)
+            {
+                server.TerminateSession(session, "connection closed");
+                break;
+            }
+
+            buffer.Write(bufferTemp, 0, bytesRead);
+            ProcessBuffer();
+        }
     }
-}
 
 
 

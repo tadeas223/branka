@@ -96,7 +96,7 @@ public class BankConnection
         string? line = reader.ReadLine();
         if(line == null)
         {
-            throw new IOException("failed to read response");
+            throw new IOException("Failed to read response.");
         } 
 
         string[] split = line.Split(" ");
@@ -120,7 +120,7 @@ public class BankConnection
         string? line = reader.ReadLine();
         if(line == null)
         {
-            throw new IOException("failed to read response");
+            throw new IOException("Failed to read response.");
         } 
 
         string[] split = line.Split(" ");

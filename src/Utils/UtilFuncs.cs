@@ -26,12 +26,12 @@ public static class UtilFuncs
         return ip;
     }
 
-    public static (int, string) ParseAccountStr(string accountStr)
+    public static (int, string)? ParseAccountStr(string accountStr)
     {
         string[] split = accountStr.Split("/");
         if(split.Length != 2)
         {
-            throw new BankException($"invalid account string {accountStr}");
+            return null;
         }
 
         int id = int.Parse(split[0]);

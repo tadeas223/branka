@@ -9,15 +9,18 @@ using System.Text.Json.Serialization;
 /// </summary>
 public class DatabaseCredentials
 {
-    private string username;
-    private string password;
-    private string databaseName;
-    private string url;
-    
-    public string Username { get => username; }
-    public string Password { get => password; }
-    public string DatabaseName { get => databaseName; }
-    public string Url { get => url; }
+    public string Username { set; get; }
+    public string Password { set; get; }
+    public string DatabaseName { set; get; }
+    public string Url { set;get; }
+
+    public DatabaseCredentials()
+    {
+        Username = "<username>";
+        Password = "<password>";
+        DatabaseName = "<database>";
+        Url = "<url>";
+    }
 
     /// <summary>
     /// Prebuilds the <see cref="SqlConnectionStringBuilder"/> without setting the database name.
@@ -27,9 +30,9 @@ public class DatabaseCredentials
         get {
             return new SqlConnectionStringBuilder
             {
-                DataSource = url,
-                UserID = username,
-                Password = password,
+                DataSource = Url,
+                UserID = Username,
+                Password = Password,
                 TrustServerCertificate = true,
             };
         }
@@ -43,10 +46,10 @@ public class DatabaseCredentials
         get {
             return new SqlConnectionStringBuilder
             {
-                DataSource = url,
-                UserID = username,
-                Password = password,
-                InitialCatalog = databaseName,
+                DataSource = Url,
+                UserID = Username,
+                Password = Password,
+                InitialCatalog = DatabaseName,
                 TrustServerCertificate = true,
             };
         }
@@ -57,10 +60,10 @@ public class DatabaseCredentials
     /// </summary>
     public DatabaseCredentials(string url, string databaseName, string username, string password) 
     {
-        this.username = username;
-        this.password = password;
-        this.databaseName = databaseName;
-        this.url = url;
+        Username = username;
+        Password = password;
+        DatabaseName = databaseName;
+        Url = url;
     }
     
     /// <summary>
@@ -86,6 +89,6 @@ public class DatabaseCredentials
 
     public override string ToString()
     {
-        return $"DatabaseCredentials{{url={url}, databaseName={databaseName}, username={username}, password={password}}}";
+        return $"DatabaseCredentials{{Url={Url}, DatabaseName={DatabaseName}, username={Username}, Password=<secret>}}";
     }
 }

@@ -4,6 +4,7 @@ using Presentation;
 using Utils;
 using Data;
 using Application.Models;
+using System.Data.Common;
 
 namespace Application.Commands;
 
@@ -12,7 +13,14 @@ public class ArCommand : Command
 
     public override void InternalExecute()
     {
-        (int id, string ip) = UtilFuncs.ParseAccountStr(Params[0]);
+        EnsusreParams(1);
+        
+        (int, string)? accountTuple = UtilFuncs.ParseAccountStr(Params[0]);
+        if(!accountTuple.HasValue)
+        {
+            throw new UnifiedMessageException("Invalid account format.");
+        }
+        (int id, string ip) = accountTuple.Value;
 
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
@@ -27,7 +35,7 @@ public class ArCommand : Command
             con.AD(id);
         }
 
-        Session.WriteLine("Ar");
+        Session.WriteLine("AR");
     }
 
 }

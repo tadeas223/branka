@@ -12,7 +12,7 @@ public class Account
         {
             if(value < 0)
             {
-                throw new BankException("account balance cannot be negative");
+                throw new Exception("Account balance cannot be negative.");
             }
             balance = value;
         }

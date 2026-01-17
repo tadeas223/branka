@@ -50,7 +50,7 @@ public class Database : IDisposable
         // Very important for a school project that noone will try to attack
         if(!Regex.IsMatch(credentials.DatabaseName, @"^[a-zA-Z0-9_]+$"))
         {
-            throw new DatabaseException("Invalid database name");
+            throw new Exception("Invalid database name");
         }
 
         var dbCommand = new SqlCommand($"CREATE DATABASE [{credentials.DatabaseName}]", connection);
@@ -75,20 +75,28 @@ public class Database : IDisposable
     /// <returns><c>true</c> if the database exists; otherwise, <c>false</c></returns>
     public static bool Exists(DatabaseCredentials credentials) 
     {
-        var conBuilder = credentials.ConnectionBuilderNoDB;
-        
-        bool exists = true;
-        using (var connection = new SqlConnection(conBuilder.ConnectionString))
+        try
         {
-            connection.Open();
-            using var command = new SqlCommand("SELECT name FROM sys.databases WHERE name = @name", connection);
-            command.Parameters.AddWithValue("@name", credentials.DatabaseName);
+            var conBuilder = credentials.ConnectionBuilderNoDB;
 
-            var reader = command.ExecuteScalar(); 
-            if(reader == null) exists = false;
+
+            bool exists = true;
+            using (var connection = new SqlConnection(conBuilder.ConnectionString))
+            {
+                connection.Open();
+                using var command = new SqlCommand("SELECT name FROM sys.databases WHERE name = @name", connection);
+                command.Parameters.AddWithValue("@name", credentials.DatabaseName);
+
+                var reader = command.ExecuteScalar(); 
+                if(reader == null) exists = false;
+            }
+
+            return exists;
         }
-
-        return exists;
+        catch
+        {
+            return false;
+        }
     }
     
     /// <summary>

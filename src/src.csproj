@@ -16,9 +16,5 @@
     <None Update="database.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-
-    <None Update="database_config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
   </ItemGroup>
 </Project>
