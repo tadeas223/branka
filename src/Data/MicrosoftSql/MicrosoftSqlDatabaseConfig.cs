@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 
 using P2PBank.Data.Interface;
 using P2PBank.Utils;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 /// <summary>
 /// Represents login credentials for the database.
@@ -17,6 +19,7 @@ public class MicrosoftSqlDatabaseConfig : DatabaseConfig
     public string DatabaseName { set; get; }
     public string Url { set;get; }
 
+    [JsonIgnore]
     public override Config DefaultConfig 
     {
         get
@@ -101,7 +104,13 @@ public class MicrosoftSqlDatabaseConfig : DatabaseConfig
     /// <returns>String with the json</returns>
     public override string Serialize()
     {
-        return JsonSerializer.Serialize(this);
+        var options = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            WriteIndented = true
+        };
+
+        return JsonSerializer.Serialize(this, options);
     }
 
     public override string ToString()

@@ -1,0 +1,7 @@
+[01/18/2026 01:12:07  info] DatabaseConfig config loaded
+[01/18/2026 01:12:08  info] using 5 workers
+[01/18/2026 01:12:08  warn] failed to load ServerConfig, using default
+[01/18/2026 01:12:10  info] session 127.0.0.1:43088 registered
+[01/18/2026 01:12:12  info] 127.0.0.1:43088 sent: AB 10007/192.168.0.74
+[01/18/2026 01:12:15  info] 127.0.0.1:43088 sent: AD 10007/192.168.0.74 1
+[01/18/2026 01:12:20  info] session 127.0.0.1:43088: terminated reason read timeout

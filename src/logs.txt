@@ -413,3 +413,318 @@
 [01/18/2026 00:29:34  info] creating account
 [01/18/2026 00:29:34  info] created account 10006/192.168.0.74
 [01/18/2026 00:29:39  info] session 127.0.0.1:54078: terminated reason read timeout
+[01/18/2026 00:56:51  info] using 5 workers
+[01/18/2026 00:56:51  warn] failed to load ServerConfig, using default
+[01/18/2026 00:57:26  info] using 5 workers
+[01/18/2026 00:57:26  warn] failed to load ServerConfig, using default
+[01/18/2026 00:57:36  info] session 127.0.0.1:46268 registered
+[01/18/2026 00:57:38  info] 127.0.0.1:46268 sent: a
+[01/18/2026 00:57:38  info] 127.0.0.1:46268 sent: asdf
+[01/18/2026 00:57:39  info] 127.0.0.1:46268 sent: asf
+[01/18/2026 00:57:39  info] 127.0.0.1:46268 sent: das
+[01/18/2026 00:57:39  info] 127.0.0.1:46268 sent: d
+[01/18/2026 00:57:40  info] 127.0.0.1:46268 sent: sdfAC
+[01/18/2026 00:57:42  info] 127.0.0.1:46268 sent: AC
+[01/18/2026 00:57:42  warn] failed to load DatabaseConfig, using default
+[01/18/2026 00:57:45  info] 127.0.0.1:46268 sent: AC
+[01/18/2026 00:57:50  info] session 127.0.0.1:46268: terminated reason read timeout
+[01/18/2026 00:57:52  info] session 127.0.0.1:38710 registered
+[01/18/2026 00:57:55  info] 127.0.0.1:38710 sent: AC
+[01/18/2026 00:57:57 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 170
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 00:57:57 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 170
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 00:57:57 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 170
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 00:58:00  info] session 127.0.0.1:38710: terminated reason read timeout
+[01/18/2026 00:59:48  warn] failed to load DatabaseConfig, using default
+[01/18/2026 00:59:48  info] using 5 workers
+[01/18/2026 00:59:48  warn] failed to load ServerConfig, using default
+[01/18/2026 00:59:52  info] session 127.0.0.1:45568 registered
+[01/18/2026 00:59:54  info] 127.0.0.1:45568 sent: AC
+[01/18/2026 00:59:59  info] session 127.0.0.1:45568: terminated reason read timeout
+[01/18/2026 01:00:09 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 173
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 01:00:37  warn] failed to load DatabaseConfig, using default
+[01/18/2026 01:00:37  info] using 5 workers
+[01/18/2026 01:00:37  warn] failed to load ServerConfig, using default
+[01/18/2026 01:00:39  info] session 127.0.0.1:46486 registered
+[01/18/2026 01:00:42  info] 127.0.0.1:46486 sent: AC
+[01/18/2026 01:00:47  info] session 127.0.0.1:46486: terminated reason read timeout
+[01/18/2026 01:00:57 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 173
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 01:01:04  warn] failed to load DatabaseConfig, using default
+[01/18/2026 01:01:04  info] using 5 workers
+[01/18/2026 01:01:05  warn] failed to load ServerConfig, using default
+[01/18/2026 01:02:06  warn] failed to load DatabaseConfig, using default
+[01/18/2026 01:02:06  info] using 5 workers
+[01/18/2026 01:02:06  warn] failed to load ServerConfig, using default
+[01/18/2026 01:03:36  info] DatabaseConfig config loaded
+[01/18/2026 01:03:36  info] using 5 workers
+[01/18/2026 01:03:36  warn] failed to load ServerConfig, using default
+[01/18/2026 01:03:39  info] session 127.0.0.1:58038 registered
+[01/18/2026 01:03:42  info] 127.0.0.1:58038 sent: AC
+[01/18/2026 01:03:47  info] session 127.0.0.1:58038: terminated reason read timeout
+[01/18/2026 01:03:57 error] Command processing failed: Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 35 - An internal exception was caught)
+ ---> System.Net.Sockets.SocketException (00000005, 0xFFFDFFFF): Name or service not known
+   at System.Net.Dns.GetHostEntryOrAddressesCore(String hostName, Boolean justAddresses, AddressFamily addressFamily, Nullable`1 activityOrDefault)
+   at System.Net.Dns.GetHostAddresses(String hostNameOrAddress, AddressFamily family)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.GetHostAddressesSortedByPreference(String serverName, SqlConnectionIPAddressPreference ipPreference)+MoveNext()
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle.Connect(String serverName, Int32 port, TimeoutTimer timeout, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo)
+   at Microsoft.Data.SqlClient.ManagedSni.SniTcpHandle..ctor(String serverName, Int32 port, TimeoutTimer timeout, Boolean parallel, SqlConnectionIPAddressPreference ipPreference, String cachedFQDN, SQLDNSInfo& pendingDNSInfo, Boolean tlsFirst, String hostNameInCertificate, String serverCertificateFilename)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at P2PBank.Data.MicrosoftSql.MicrosoftSqlDatabase.Create() in /home/tad/Development/CSharp/p2p_bank/src/Data/MicrosoftSql/MicrosoftSqlDatabase.cs:line 62
+   at Program.<>c.<DiData>b__4_1(IServiceProvider sp) in /home/tad/Development/CSharp/p2p_bank/src/Program.cs:line 173
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService[T](IServiceProvider provider)
+   at P2PBank.Application.Interface.CommandFactory.Create(String cmdString) in /home/tad/Development/CSharp/p2p_bank/src/Application/CommandFactory.cs:line 41
+   at P2PBank.Presentation.Tcp.TcpServer.<>c__DisplayClass9_1.<RegisterSession>b__1() in /home/tad/Development/CSharp/p2p_bank/src/Presentation/Tcp/TcpServer.cs:line 100
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:11001,State:0,Class:20
+[01/18/2026 01:04:58  info] DatabaseConfig config loaded
+[01/18/2026 01:06:19  info] DatabaseConfig config loaded
+[01/18/2026 01:06:55  info] DatabaseConfig config loaded
+[01/18/2026 01:07:10 error] failed to connect or create to the database
+[01/18/2026 01:07:10  info] using 5 workers
+[01/18/2026 01:07:10  warn] failed to load ServerConfig, using default
+[01/18/2026 01:08:06  info] DatabaseConfig config loaded
+[01/18/2026 01:08:19  info] DatabaseConfig config loaded
+[01/18/2026 01:08:20  info] using 5 workers
+[01/18/2026 01:08:20  warn] failed to load ServerConfig, using default
+[01/18/2026 01:08:22  info] session 127.0.0.1:53892 registered
+[01/18/2026 01:08:23  info] 127.0.0.1:53892 sent: AC
+[01/18/2026 01:08:23  info] creating account
+[01/18/2026 01:08:23  info] created account 10007/192.168.0.74
+[01/18/2026 01:08:28  info] session 127.0.0.1:53892: terminated reason read timeout
+[01/18/2026 01:08:29  info] session 127.0.0.1:60562 registered
+[01/18/2026 01:08:31  info] 127.0.0.1:60562 sent: AB 10007/192.168.0.74
+[01/18/2026 01:08:33  info] session 127.0.0.1:60562: terminated reason connection closed
+[01/18/2026 01:08:35  info] session 127.0.0.1:51804 registered
+[01/18/2026 01:08:38  info] 127.0.0.1:51804 sent: AB 10007/192.168.0.74 100
+[01/18/2026 01:08:40  info] 127.0.0.1:51804 sent: AB
+[01/18/2026 01:08:45  info] session 127.0.0.1:51804: terminated reason read timeout
+[01/18/2026 01:09:43  info] DatabaseConfig config loaded
+[01/18/2026 01:09:43  info] using 5 workers
+[01/18/2026 01:09:43  warn] failed to load ServerConfig, using default
+[01/18/2026 01:09:45  info] session 127.0.0.1:37058 registered
+[01/18/2026 01:09:46  info] 127.0.0.1:37058 sent: AB 10007/192.168.0.74
+[01/18/2026 01:09:51  info] session 127.0.0.1:37058: terminated reason read timeout
+[01/18/2026 01:09:55  info] session 127.0.0.1:35860 registered
+[01/18/2026 01:09:56  info] 127.0.0.1:35860 sent: AB 1
+[01/18/2026 01:10:01  info] session 127.0.0.1:35860: terminated reason read timeout
+[01/18/2026 01:10:21  info] session 127.0.0.1:43218 registered
+[01/18/2026 01:10:22  info] 127.0.0.1:43218 sent: AB
+[01/18/2026 01:10:24  info] 127.0.0.1:43218 sent: AB 1
+[01/18/2026 01:10:25  info] 127.0.0.1:43218 sent: AB 2
+[01/18/2026 01:10:27  info] 127.0.0.1:43218 sent: AB aa a
+[01/18/2026 01:10:30  info] 127.0.0.1:43218 sent: AB
+[01/18/2026 01:10:33  info] 127.0.0.1:43218 sent: AD 10007/192.168.0.74 11
+[01/18/2026 01:10:37  info] session 127.0.0.1:43218: terminated reason connection closed
+[01/18/2026 01:10:39  info] session 127.0.0.1:45274 registered
+[01/18/2026 01:10:41  info] 127.0.0.1:45274 sent: AD 10007/192.168.0.74 
+[01/18/2026 01:10:43  info] session 127.0.0.1:45274: terminated reason connection closed
+[01/18/2026 01:10:48  info] session 127.0.0.1:39690 registered
+[01/18/2026 01:10:50  info] 127.0.0.1:39690 sent: AD 10007/192.168.0.74
+[01/18/2026 01:10:55  info] session 127.0.0.1:39690: terminated reason read timeout

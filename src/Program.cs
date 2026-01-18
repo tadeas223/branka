@@ -20,14 +20,14 @@ public static class Program
         if(args.Length < 2)
         {
             Console.WriteLine("p2p_bank [config directory path] [log file path]");
-            Console.WriteLine("p2p_bank default [ServerConfig/DatabaseCredentials]");
+            Console.WriteLine("p2p_bank default [ServerConfig/DatabaseConfig]");
             return;
         }
 
         string configDir = args[0];
         string logFile = args[1];
         
-        string databaseConfigFile = Path.Combine(configDir, "DatabaseCredentials.json");
+        string databaseConfigFile = Path.Combine(configDir, "DatabaseConfig.json");
         string serverConfigFile = Path.Combine(configDir, "ServerConfig.json");
         
         ServiceCollection services = new();
@@ -36,9 +36,9 @@ public static class Program
         Log log = new Log {FilePath = logFile };
         services.AddSingleton<Log>(sp => log);
 
-        DiPresentation(log, services, serverConfigFile); 
+        DiPresentation(log, services, (args[0] == "default")? null: serverConfigFile);
         DiApplication(log, services); 
-        DiData(log, services, databaseConfigFile); 
+        DiData(log, services, (args[0] == "default")? null: databaseConfigFile);
 
         using ServiceProvider provider = services.BuildServiceProvider();
 
@@ -74,7 +74,7 @@ public static class Program
         
         switch(args[1])
         {
-            case "DatabaseCredentials":
+            case "DatabaseConfig":
                 Console.WriteLine(databaseConfig.DefaultConfig.Serialize());
                 break;
             case "ServerConfig":
@@ -110,60 +110,78 @@ public static class Program
         services.AddTransient<ICommandFactory, CommandFactory>();
     }
 
-    public static void DiPresentation(Log log, ServiceCollection services, string serverConfigFile)
+    public static void DiPresentation(Log log, ServiceCollection services, string? serverConfigFile)
     {
         services.AddSingleton<IServer, TcpServer>();
         services.AddTransient<ISession, TcpSession>();
         services.AddSingleton<ServerConfig>(sp =>
         {
-            try
+            if(serverConfigFile != null)
             {
-                TcpServerConfig config = TcpServerConfig.Deserialize(File.ReadAllText(serverConfigFile));
-                log.Info("ServerConfig config loaded");
-                return config;
+                try
+                {
+                    TcpServerConfig config = TcpServerConfig.Deserialize(File.ReadAllText(serverConfigFile));
+                    log.Info("ServerConfig config loaded");
+                    return config;
+                }
+                catch
+                {
+                    log.Warn("failed to load ServerConfig, using default");
+                    return (ServerConfig)new TcpServerConfig().DefaultConfig;
+                }
             }
-            catch
-            {
-                log.Warn("failed to load ServerConfig, using default");
-                return (ServerConfig)new TcpServerConfig().DefaultConfig;
-            }
+            return (ServerConfig)new TcpServerConfig().DefaultConfig;
         });
     }
 
-    public static void DiData(Log log, ServiceCollection services, string databaseConfigFile)
+    public static void DiData(Log log, ServiceCollection services, string? databaseConfigFile)
     {
-        services.AddSingleton<DatabaseConfig>(sp => 
+        DatabaseConfig config;
+        if(databaseConfigFile != null)
         {
             try
             {
-                var config = MicrosoftSqlDatabaseConfig.Deserialize(File.ReadAllText(databaseConfigFile));
+                var mssqlConfig = MicrosoftSqlDatabaseConfig.Deserialize(File.ReadAllText(databaseConfigFile));
                 log.Info("DatabaseConfig config loaded");
-                return config;
+                config = mssqlConfig;
             }
             catch
             {
                 log.Warn("failed to load DatabaseConfig, using default");
-                return (DatabaseConfig)new MicrosoftSqlDatabaseConfig().DefaultConfig;
+                config = (DatabaseConfig)new MicrosoftSqlDatabaseConfig().DefaultConfig;
             }
+        }
+        else
+        {
+            config = (DatabaseConfig)new MicrosoftSqlDatabaseConfig().DefaultConfig;
+        }
+
+        services.AddSingleton<DatabaseConfig>(sp =>
+        {
+            return config;
         });
 
-        services.AddTransient<IAccountRepository, MicrosoftSqlAccountRepository>();
-        
-        services.AddSingleton<MicrosoftSqlDatabase>(sp =>
+        var database = new MicrosoftSqlDatabase(config);
+
+        try
         {
-            var config = sp.GetService<DatabaseConfig>();
-            if(config == null)
-            {
-                throw new Exception("DatabaseConfig service is missing");
-            }
-            var database = new MicrosoftSqlDatabase(config);
             if(!database.Exists())
             {
                 database.Create();
             }
-
             database.Connect();
+        }
+        catch
+        {
+            log.Error("failed to connect or create to the database");
+        }
+
+        services.AddSingleton<MicrosoftSqlDatabase>(sp =>
+        {
             return database;
         });
+        
+        services.AddTransient<IAccountRepository, MicrosoftSqlAccountRepository>();
+        
     }
 }

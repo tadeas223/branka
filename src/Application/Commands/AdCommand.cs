@@ -17,7 +17,7 @@ public class AdCommand : Command
 
     public override void InternalExecute()
     {
-        EnsusreParams(1);
+        EnsusreParams(2);
         
         (int, string)? accountTuple = UtilFuncs.ParseAccountStr(Params[0]);
         if(!accountTuple.HasValue)

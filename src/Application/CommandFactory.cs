@@ -15,6 +15,7 @@ public class CommandFactory : ICommandFactory
 
     public Command Create(string cmdString)
     {
+        cmdString.Trim();
         string[] split = cmdString.Split(' ');
         if(split.Length < 1)
         {
@@ -45,7 +46,7 @@ public class CommandFactory : ICommandFactory
                 cmd = provider.GetService<ArCommand>();
                 break;
             case "AD":
-                cmd = provider.GetService<ArCommand>();
+                cmd = provider.GetService<AdCommand>();
                 break;
             case "AW":
                 cmd = provider.GetService<AwCommand>();
@@ -60,7 +61,6 @@ public class CommandFactory : ICommandFactory
                 cmd = provider.GetService<BnCommand>();
                 break;
         }
-
         if(cmd == null) 
         {
             ErCommand? erCommand = provider.GetService<ErCommand>();
@@ -73,7 +73,8 @@ public class CommandFactory : ICommandFactory
 
             return erCommand;
         }
-
+        
+        cmd.Params.AddRange(split[1..]);
         return cmd;
     }
 }
