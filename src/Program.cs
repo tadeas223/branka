@@ -19,15 +19,15 @@ public static class Program
         if(args.Length < 2)
         {
             Console.WriteLine("p2p_bank [config directory path] [log file path]");
-            Console.WriteLine("p2p_bank default [ServerConfig/DatabaseConfig]");
+            Console.WriteLine("p2p_bank default [ServerConfig.config/DatabaseConfig.config]");
             return;
         }
 
         string configDir = args[0];
         string logFile = args[1];
         
-        string databaseConfigFile = Path.Combine(configDir, "DatabaseConfig.json");
-        string serverConfigFile = Path.Combine(configDir, "ServerConfig.json");
+        string databaseConfigFile = Path.Combine(configDir, "DatabaseConfig.config");
+        string serverConfigFile = Path.Combine(configDir, "ServerConfig.config");
         
         ServiceCollection services = new();
 
@@ -73,10 +73,10 @@ public static class Program
         
         switch(args[1])
         {
-            case "DatabaseConfig":
+            case "DatabaseConfig.config":
                 Console.WriteLine(databaseConfig.DefaultConfig.Serialize());
                 break;
-            case "ServerConfig":
+            case "ServerConfig.config":
                 Console.WriteLine(serverConfig.DefaultConfig.Serialize());
                 break;
             default:
