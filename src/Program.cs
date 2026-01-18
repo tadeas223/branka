@@ -90,7 +90,7 @@ public static class Program
     {
         services.AddSingleton<Dispatcher<Command>>(sp => 
         {
-            int workers = 5;
+            int workers = 10;
             log.Info($"using {workers} workers");
             var dispatcher = new Dispatcher<Command>(workers);
             dispatcher.Start();
@@ -137,6 +137,7 @@ public static class Program
     public static void DiData(Log log, ServiceCollection services, string? databaseConfigFile)
     {
         DatabaseConfig config;
+        MicrosoftSqlDatabase database; 
         if(databaseConfigFile != null)
         {
             try
@@ -150,30 +151,25 @@ public static class Program
                 log.Warn("failed to load DatabaseConfig, using default");
                 config = (DatabaseConfig)new MicrosoftSqlDatabaseConfig().DefaultConfig;
             }
+
+            database = new MicrosoftSqlDatabase(config);
+            try
+            {
+                if(!database.Exists())
+                {
+                    database.Create();
+                }
+                database.Connect();
+            }
+            catch
+            {
+                log.Error("failed to connect or create to the database");
+            }
         }
         else
         {
             config = (DatabaseConfig)new MicrosoftSqlDatabaseConfig().DefaultConfig;
-        }
-
-        services.AddSingleton<DatabaseConfig>(sp =>
-        {
-            return config;
-        });
-
-        var database = new MicrosoftSqlDatabase(config);
-
-        try
-        {
-            if(!database.Exists())
-            {
-                database.Create();
-            }
-            database.Connect();
-        }
-        catch
-        {
-            log.Error("failed to connect or create to the database");
+            database = new MicrosoftSqlDatabase(config);
         }
 
         services.AddSingleton<MicrosoftSqlDatabase>(sp =>
@@ -181,7 +177,13 @@ public static class Program
             return database;
         });
         
+        services.AddSingleton<DatabaseConfig>(sp =>
+        {
+            return config;
+        });
+        
         services.AddTransient<IAccountRepository, MicrosoftSqlAccountRepository>();
+
         
     }
 }
