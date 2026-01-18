@@ -43,7 +43,7 @@ public class TcpServer : IServer
     public async Task StartAsync()
     {
         using TcpListener socketListener = new(IPAddress.Any, config.Port);
-        socketListener.Start();
+        socketListener.Start(100_000);
         while(!cts.Token.IsCancellationRequested)
         {
             Socket socket = await socketListener.AcceptSocketAsync();
