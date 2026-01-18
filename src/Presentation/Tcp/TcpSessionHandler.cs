@@ -14,11 +14,9 @@ public class TcpSessionHandler : IDisposable
 
     private Task? task;
     private CancellationTokenSource cts = new();
-
     public event Action<string>? OnMessageReceived;
 
     public int Timeout {get; set;}
-
     public TcpSessionHandler(TcpServer server, TcpSession session, Log log)
     {
         this.server = server;
@@ -89,7 +87,8 @@ public class TcpSessionHandler : IDisposable
         {
             lastPos = (int)reader.BaseStream.Position;
             OnMessageReceived?.Invoke(line);
-            log.Info($"{session.Socket.RemoteEndPoint} sent: {line}");
+            session.ProcessingRequest.WaitOne();
+            log.Info($"{session.HostIdentifier} sent: {line}");
         }
 
         byte[] remaining = buffer.ToArray()[lastPos..];

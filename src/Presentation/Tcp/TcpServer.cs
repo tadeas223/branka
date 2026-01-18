@@ -48,7 +48,7 @@ public class TcpServer : IServer
         {
             Socket socket = await socketListener.AcceptSocketAsync();
             
-            TcpSession session = new TcpSession(socket);
+            TcpSession session = new TcpSession(socket, log);
             RegisterSession(session);
         }
         socketListener.Stop();
@@ -67,13 +67,13 @@ public class TcpServer : IServer
         sessions.Remove(tcpSession, out sessionHandler);
         if(sessionHandler == null)
         {
-            log.Warn($"session {tcpSession.Socket.RemoteEndPoint} was not registered with this server, session handler is LEAKED");
+            log.Warn($"session {tcpSession.HostIdentifier} was not registered with this server, session handler is LEAKED");
             return;
         }
 
         sessionHandler.Dispose();
 
-        log.Info($"session {tcpSession.Socket.RemoteEndPoint}: terminated reason {reason}");
+        log.Info($"session {tcpSession.HostIdentifier}: terminated reason {reason}");
     }
 
     public void RegisterSession(ISession session)
@@ -110,7 +110,7 @@ public class TcpServer : IServer
 
         handler.Start();
 
-        log.Info($"session {tcpSession.Socket.RemoteEndPoint} registered");
+        log.Info($"session {tcpSession.HostIdentifier} registered");
     }
 
     public void Dispose()

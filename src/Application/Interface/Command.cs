@@ -44,13 +44,16 @@ public abstract class Command: IWorkerTask
         }
         catch (UnifiedMessageException e)
         {
-            Session.WriteLine($"ER {e.Message}");
+            Session.WriteLineDontLog($"ER {e.Message}");
+            log.Error($"{Session.HostIdentifier} ER {e.Message}");
         }
         catch(Exception e)
         {
-            Session.WriteLine("ER Something unexpected has happend on the server.");
-            log.Error(e.ToString());
+            Session.WriteLineDontLog("ER Something unexpected has happend on the server.");
+            log.Error($"{Session.HostIdentifier} UNHANDLED EXCEPTION: {e}");
         }
+
+        Session.ProcessingRequest.Set();
     }
 
     public void EnsusreParams(int paramCount)

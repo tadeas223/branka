@@ -46,11 +46,11 @@ public class MicrosoftSqlAccountRepository: IAccountRepository
 
     public void Insert(Account account)
     {
-        log.Info($"creating account");
         using var command = new SqlCommand(
             "INSERT INTO account_table(balance) VALUES (@balance); SELECT CAST(SCOPE_IDENTITY() AS INT)",
             database.Connection
         );
+        command.CommandTimeout = 1;
         command.Parameters.AddWithValue("@balance", account.Balance);
         account.Id = (int)command.ExecuteScalar();
 
@@ -62,7 +62,7 @@ public class MicrosoftSqlAccountRepository: IAccountRepository
         using var command = new SqlCommand("UPDATE account_table SET balance=@balance WHERE id = @id", database.Connection);
         command.Parameters.AddWithValue("@id", oldAccount.Id);
         command.Parameters.AddWithValue("@balance", newAccount.Balance);
-
+        command.CommandTimeout = 1;
         command.ExecuteNonQuery();
     }
     
@@ -70,6 +70,7 @@ public class MicrosoftSqlAccountRepository: IAccountRepository
     {
         using var command = new SqlCommand("SELECT id, balance FROM account_table WHERE id = @id", database.Connection);
         command.Parameters.AddWithValue("@id", id);
+        command.CommandTimeout = 1;
         using var reader = command.ExecuteReader(); 
         if(reader.Read())
         {
@@ -85,6 +86,7 @@ public class MicrosoftSqlAccountRepository: IAccountRepository
     public void Delete(Account account)
     {
         using var command = new SqlCommand("DELETE FROM account_table WHERE id = @id", database.Connection);
+        command.CommandTimeout = 1;
         command.Parameters.AddWithValue("@id", account.Id);
 
         command.ExecuteNonQuery();
