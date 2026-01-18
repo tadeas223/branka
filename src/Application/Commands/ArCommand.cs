@@ -29,14 +29,37 @@ public class ArCommand : Command
 
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
-            Account acc = accountRepository.SelectById(id);
-            accountRepository.Delete(acc);
+            Account acc;
+            try
+            {
+                acc = accountRepository.SelectById(id);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Account was not found.");
+            }
+
+            try
+            {
+                accountRepository.Delete(acc);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Account could not be deleted from the bank database.");
+            }
         }
         else
         {
             BankConnection con = new(ip);
 
-            con.AD(id);
+            try
+            {
+                con.AD(id);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Account could not be deleted from a remote bank or failed to connect to a remote bank.");
+            }
         }
 
         Session.WriteLine("AR");

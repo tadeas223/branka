@@ -17,8 +17,16 @@ public class BnCommand : Command
     public override void InternalExecute()
     {
         EnsusreParams(0);
-
-        int clients = accountRepository.ClientCount;
+        
+        int clients;
+        try
+        {
+            clients = accountRepository.ClientCount;
+        }
+        catch
+        {
+            throw new UnifiedMessageException("Failed to calculate the total client count.");
+        }
 
         Session.WriteLine($"BN {clients}");
     }

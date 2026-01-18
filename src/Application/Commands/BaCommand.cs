@@ -18,7 +18,15 @@ public class BaCommand : Command
     {
         EnsusreParams(0);
 
-        long balance = accountRepository.TotalBalance;
+        long balance;
+        try
+        {
+            balance = accountRepository.TotalBalance;
+        }
+        catch
+        {
+            throw new UnifiedMessageException("Failed to calculate the total bank balance.");
+        }
 
         Session.WriteLine($"BA {balance}");
     }

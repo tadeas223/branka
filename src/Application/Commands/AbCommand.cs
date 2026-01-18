@@ -43,7 +43,14 @@ public class AbCommand: Command
         {
             BankConnection con = new(ip);
 
-            balance = con.AB(id);
+            try
+            {
+                balance = con.AB(id);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Failed to deposit to a remote bank.");
+            }
         }
 
         Session.WriteLine($"AB {balance}");

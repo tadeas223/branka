@@ -22,7 +22,14 @@ public class AcCommand: Command
         Account account = new();
         account.Ip = UtilFuncs.GetLocalIPAddress();
 
-        accountRepository.Insert(account);
+        try
+        {
+            accountRepository.Insert(account);
+        }
+        catch
+        {
+            throw new UnifiedMessageException("Failed to create an account in the bank database.");
+        }
 
         Session.WriteLine($"AC {account}");
     }

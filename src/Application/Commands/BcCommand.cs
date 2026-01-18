@@ -14,7 +14,7 @@ public class BcCommand : Command
     public override void InternalExecute()
     {
         EnsusreParams(0);
-
+        
         string? ip = UtilFuncs.GetLocalIPAddress();
 
         Session.WriteLine($"BC {ip}");
