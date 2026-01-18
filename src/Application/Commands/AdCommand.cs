@@ -26,7 +26,21 @@ public class AdCommand : Command
         }
         (int id, string ip) = accountTuple.Value;
 
-        long deposit = long.Parse(Params[1]);
+
+        long deposit = 0;
+        try
+        {
+            deposit = long.Parse(Params[1]);
+        }
+        catch
+        {
+            throw new UnifiedMessageException("Deposit must be a positive number.");
+        }
+
+        if(deposit < 0)
+        {
+            throw new UnifiedMessageException("Deposit cannot be negative.");
+        }
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
             Account acc;
@@ -56,7 +70,14 @@ public class AdCommand : Command
         {
             BankConnection con = new(ip);
 
-            con.AD(id, deposit);
+            try
+            {
+                con.AD(id, deposit);
+            }
+            catch
+            {
+                throw new UnifiedMessageException("Failed to deposit to a remote bank.");
+            }
         }
 
         Session.WriteLine("AD");
