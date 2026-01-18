@@ -2,6 +2,7 @@ namespace P2PBank.Data.MicrosoftSql;
 
 using Microsoft.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 using P2PBank.Data.Interface;
 
@@ -13,7 +14,7 @@ public class MicrosoftSqlDatabase : IDisposable
     /// <summary>
     /// Path to a SQL script for initializing the database tables.
     /// <\summary>
-    public static string DATABASE_SQL = Path.Combine(AppContext.BaseDirectory, "database.sql");
+    public static string DATABASE_SQL = "P2PBank.Data.MicrosoftSql.database.sql";
     
     private SqlConnection connection;
     private MicrosoftSqlDatabaseConfig config;
@@ -55,7 +56,15 @@ public class MicrosoftSqlDatabase : IDisposable
     /// <exception cref="SqlException">Thrown if the credentials are wrong</exception>
     public void Create()
     {
-        string sql = File.ReadAllText(DATABASE_SQL);
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream(DATABASE_SQL);
+        if(stream == null)
+        {
+            throw new Exception("failed to load database.sql");
+        }
+        using var reader = new StreamReader(stream);
+        string sql = reader.ReadToEnd();
+
         
         var conBuilder = config.ConnectionBuilderNoDB;
         using(var connection = new SqlConnection(conBuilder.ConnectionString)) {

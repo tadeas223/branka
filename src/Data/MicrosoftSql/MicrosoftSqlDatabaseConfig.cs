@@ -46,6 +46,7 @@ public class MicrosoftSqlDatabaseConfig : DatabaseConfig
                 UserID = Username,
                 Password = Password,
                 TrustServerCertificate = true,
+                ConnectTimeout = 1
             };
         }
     }

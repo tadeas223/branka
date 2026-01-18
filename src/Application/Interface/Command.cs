@@ -48,7 +48,7 @@ public abstract class Command: IWorkerTask
         }
         catch(Exception e)
         {
-            Session.WriteLine("ER Something went wrong on the server.");
+            Session.WriteLine("ER Something unexpected has happend on the server.");
             log.Error(e.ToString());
         }
     }

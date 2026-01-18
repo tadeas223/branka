@@ -11,8 +11,7 @@ using P2PBank.Presentation.Tcp;
 using P2PBank.Application.Interface;
 
 using P2PBank.Utils;
-using System.ComponentModel.Design;
-
+using System.Reflection;
 public static class Program
 {
     public static async Task Main(string[] args)
@@ -161,9 +160,9 @@ public static class Program
                 }
                 database.Connect();
             }
-            catch
+            catch(Exception e)
             {
-                log.Error("failed to connect or create to the database");
+                log.Error($"failed to connect or create to the database {e}");
             }
         }
         else
