@@ -4,19 +4,31 @@ using System.Net.Sockets;
 
 public class BankConnection
 {
-    public static int PORT = 5000;
     private string ip;
+    private int port;
+    private int timeoutSeconds;
     
-    public BankConnection(string ip)
+    public BankConnection(string ip, int port, int timeoutSeconds = 5)
     {
         this.ip = ip;
+        this.port = port;
+        this.timeoutSeconds = timeoutSeconds;
     }
 
     public string BC()
     {
-        using TcpClient client = new TcpClient(ip, PORT);
-        using var writer = new StreamWriter(client.GetStream());
-        using var reader = new StreamReader(client.GetStream());
+        using TcpClient client = new TcpClient();
+        if (!client.ConnectAsync(ip, port).Wait(TimeSpan.FromSeconds(timeoutSeconds)))
+        {
+            throw new IOException("Connection timeout");
+        }
+        
+        using var stream = client.GetStream();
+        stream.ReadTimeout = timeoutSeconds * 1000;
+        stream.WriteTimeout = timeoutSeconds * 1000;
+        
+        using var writer = new StreamWriter(stream);
+        using var reader = new StreamReader(stream);
 
         writer.WriteLine("BC");
         writer.Flush();
@@ -40,9 +52,18 @@ public class BankConnection
 
     public void AD(int id, long deposit)
     {
-        using TcpClient client = new TcpClient(ip, PORT);
-        using var writer = new StreamWriter(client.GetStream());
-        using var reader = new StreamReader(client.GetStream());
+        using TcpClient client = new TcpClient();
+        if (!client.ConnectAsync(ip, port).Wait(TimeSpan.FromSeconds(timeoutSeconds)))
+        {
+            throw new IOException("Connection timeout");
+        }
+        
+        using var stream = client.GetStream();
+        stream.ReadTimeout = timeoutSeconds * 1000;
+        stream.WriteTimeout = timeoutSeconds * 1000;
+        
+        using var writer = new StreamWriter(stream);
+        using var reader = new StreamReader(stream);
 
         writer.WriteLine($"AD {id}/{ip} {deposit}");
         writer.Flush();
@@ -62,9 +83,18 @@ public class BankConnection
     
     public void AW(int id, long withdraw)
     {
-        using TcpClient client = new TcpClient(ip, PORT);
-        using var writer = new StreamWriter(client.GetStream());
-        using var reader = new StreamReader(client.GetStream());
+        using TcpClient client = new TcpClient();
+        if (!client.ConnectAsync(ip, port).Wait(TimeSpan.FromSeconds(timeoutSeconds)))
+        {
+            throw new IOException("Connection timeout");
+        }
+        
+        using var stream = client.GetStream();
+        stream.ReadTimeout = timeoutSeconds * 1000;
+        stream.WriteTimeout = timeoutSeconds * 1000;
+        
+        using var writer = new StreamWriter(stream);
+        using var reader = new StreamReader(stream);
 
         writer.WriteLine($"AW {id}/{ip} {withdraw}");
         writer.Flush();
@@ -84,9 +114,18 @@ public class BankConnection
     
     public long AB(int id)
     {
-        using TcpClient client = new TcpClient(ip, PORT);
-        using var writer = new StreamWriter(client.GetStream());
-        using var reader = new StreamReader(client.GetStream());
+        using TcpClient client = new TcpClient();
+        if (!client.ConnectAsync(ip, port).Wait(TimeSpan.FromSeconds(timeoutSeconds)))
+        {
+            throw new IOException("Connection timeout");
+        }
+        
+        using var stream = client.GetStream();
+        stream.ReadTimeout = timeoutSeconds * 1000;
+        stream.WriteTimeout = timeoutSeconds * 1000;
+        
+        using var writer = new StreamWriter(stream);
+        using var reader = new StreamReader(stream);
 
         writer.WriteLine($"AB {id}/{ip}");
         writer.Flush();
@@ -106,13 +145,22 @@ public class BankConnection
         return long.Parse(split[1]);
     }
     
-    public void AD(int id)
+    public void AR(int id)
     {
-        using TcpClient client = new TcpClient(ip, PORT);
-        using var writer = new StreamWriter(client.GetStream());
-        using var reader = new StreamReader(client.GetStream());
+        using TcpClient client = new TcpClient();
+        if (!client.ConnectAsync(ip, port).Wait(TimeSpan.FromSeconds(timeoutSeconds)))
+        {
+            throw new IOException("Connection timeout");
+        }
+        
+        using var stream = client.GetStream();
+        stream.ReadTimeout = timeoutSeconds * 1000;
+        stream.WriteTimeout = timeoutSeconds * 1000;
+        
+        using var writer = new StreamWriter(stream);
+        using var reader = new StreamReader(stream);
 
-        writer.WriteLine($"AD {id}/{ip}");
+        writer.WriteLine($"AR {id}/{ip}");
         writer.Flush();
 
         string? line = reader.ReadLine();
