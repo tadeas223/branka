@@ -4,15 +4,19 @@ using P2PBank.Application.Interface;
 using P2PBank.Utils;
 using P2PBank.Data.Interface;
 using P2PBank.Application.Interface.Models;
+using P2PBank.Presentation.Interface;
+using P2PBank.Presentation.Tcp;
 
 public class AdCommand : Command
 {
     private IAccountRepository accountRepository;
+    private ServerConfig serverConfig;
 
-    public AdCommand(IAccountRepository accountRepository, Log log) : base(log)
+    public AdCommand(IAccountRepository accountRepository, ServerConfig serverConfig, Log log) : base(log)
     {
         Name = "AD";
         this.accountRepository = accountRepository;
+        this.serverConfig = serverConfig;
     }
 
     public override void InternalExecute()
@@ -37,10 +41,7 @@ public class AdCommand : Command
             throw new UnifiedMessageException("Deposit must be a positive number.");
         }
 
-        if(deposit < 0)
-        {
-            throw new UnifiedMessageException("Deposit cannot be negative.");
-        }
+        Validators.ValidateAmount(deposit);
         if(ip == UtilFuncs.GetLocalIPAddress())
         {
             Account acc;
@@ -68,7 +69,10 @@ public class AdCommand : Command
         }
         else
         {
-            BankConnection con = new(ip);
+            TcpServerConfig? tcpConfig = serverConfig as TcpServerConfig;
+            int port = tcpConfig?.Port ?? 65525;
+            int timeout = tcpConfig?.ClientTimeout ?? 5;
+            BankConnection con = new(ip, port, timeout);
 
             try
             {
