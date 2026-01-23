@@ -113,6 +113,11 @@ public class TcpServer : IServer
         log.Info($"session {tcpSession.HostIdentifier} registered");
     }
 
+    public IEnumerable<ISession> GetActiveSessions()
+    {
+        return sessions.Keys.Cast<ISession>().Where(s => s.Connected).ToList();
+    }
+
     public void Dispose()
     {
         foreach(var kvp in sessions)
