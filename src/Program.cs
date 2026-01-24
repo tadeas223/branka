@@ -1,4 +1,4 @@
-﻿using P2PBank.Application.Commands;
+using P2PBank.Application.Commands;
 using WorkDispatcher;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,6 +7,7 @@ using P2PBank.Data.MicrosoftSql;
 
 using P2PBank.Presentation.Interface;
 using P2PBank.Presentation.Tcp;
+using P2PBank.Presentation.Web;
 
 using P2PBank.Application.Interface;
 
@@ -54,7 +55,51 @@ public static class Program
             return;
         }
 
-        await server.StartAsync();
+        IAccountRepository? accountRepository = provider.GetService<IAccountRepository>();
+        if(accountRepository == null)
+        {
+            log.Error("missing IAccountRepository service");
+            return;
+        }
+
+        ServerConfig? serverConfig = provider.GetService<ServerConfig>();
+        if(serverConfig == null)
+        {
+            log.Error("missing ServerConfig service");
+            return;
+        }
+
+        // Start monitoring web server
+        MonitoringWebServer monitoringServer = new(server, accountRepository, log, serverConfig);
+        monitoringServer.Start(8080);
+        var shutdownToken = monitoringServer.GetShutdownToken();
+
+        // Start TCP server in background
+        var tcpServerTask = Task.Run(async () =>
+        {
+            try
+            {
+                await server.StartAsync();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"TCP server error: {ex}");
+            }
+        });
+
+        // Wait for shutdown signal
+        try
+        {
+            await Task.Delay(Timeout.Infinite, shutdownToken);
+        }
+        catch (OperationCanceledException)
+        {
+            log.Info("Shutdown signal received, stopping server...");
+        }
+
+        // Cleanup
+        server.Dispose();
+        log.Info("Server stopped");
     }
 
     public static void Default(string[] args, ServiceProvider provider)
