@@ -71,7 +71,7 @@ public class TcpSession : ISession
     
     public async Task WriteLineAsync(string msg)
     {
-        msg += '\n';
+        msg += Environment.NewLine;
         log.Info($"{HostIdentifier} {msg}");
         await WriteAsync(msg);
     }

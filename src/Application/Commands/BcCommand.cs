@@ -17,7 +17,6 @@ public class BcCommand : Command
         
         string? ip = UtilFuncs.GetLocalIPAddress();
 
-        Task.Delay(1000).GetAwaiter().GetResult();
         Session.WriteLine($"BC {ip}");
     }
 
