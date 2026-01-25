@@ -18,35 +18,37 @@ public static class Program
     {
         if(args.Length < 2)
         {
-            Console.WriteLine("p2p_bank [config directory path] [log file path]");
+            Console.WriteLine("p2p_bank run [config directory path] [log file path]");
             Console.WriteLine("p2p_bank default [ServerConfig.config/DatabaseConfig.config]");
             return;
         }
 
-        string configDir = args[0];
-        string logFile = args[1];
-        
-        string databaseConfigFile = Path.Combine(configDir, "DatabaseConfig.config");
-        string serverConfigFile = Path.Combine(configDir, "ServerConfig.config");
-        
-        ServiceCollection services = new();
-
-        // setup dependency injection
-        Log log = new Log {FilePath = logFile };
-        services.AddSingleton<Log>(sp => log);
-
-        DiPresentation(log, services, (args[0] == "default")? null: serverConfigFile);
-        DiApplication(log, services); 
-        DiData(log, services, (args[0] == "default")? null: databaseConfigFile);
-
-        using ServiceProvider provider = services.BuildServiceProvider();
 
         if(args[0] == "default")
         {
-            Default(args, provider);
-            return;
+            using ServiceProvider provider = SetupProvider();
+            RunDefault(provider, args[1]);
         }
-        
+        else if (args[0] == "run")
+        {
+            using ServiceProvider provider = SetupProvider(args[1], args[2]);
+            RunDefault(provider, "DatabaseConfig.config");
+            await RunServer(provider);
+        }
+        else
+        {
+            Console.WriteLine("invalid argument");
+        }
+    }
+
+    public static async Task RunServer(ServiceProvider provider)
+    {
+        Log? log = provider.GetService<Log>();
+        if(log == null)
+        {
+            throw new Exception("log services was not found");
+        }
+
         IServer? server = provider.GetService<IServer>();
         if(server == null)
         {
@@ -57,7 +59,29 @@ public static class Program
         await server.StartAsync();
     }
 
-    public static void Default(string[] args, ServiceProvider provider)
+    public static ServiceProvider SetupProvider(string? configDir=null, string? logFile=null)
+    {
+        string? databaseConfigFile = null;
+        string? serverConfigFile = null;
+        if(configDir != null)
+        {
+            databaseConfigFile = Path.Combine(configDir, "DatabaseConfig.config");
+            serverConfigFile = Path.Combine(configDir, "ServerConfig.config");
+        }
+        ServiceCollection services = new();
+
+        // setup dependency injection
+        Log log = new Log {FilePath = logFile };
+        services.AddSingleton<Log>(sp => log);
+
+        DiPresentation(log, services, serverConfigFile);
+        DiApplication(log, services); 
+        DiData(log, services, databaseConfigFile);
+
+        return services.BuildServiceProvider();
+    }
+
+    public static void RunDefault(ServiceProvider provider, string config)
     {
         ServerConfig? serverConfig = provider.GetService<ServerConfig>();
         if(serverConfig == null)
@@ -71,7 +95,7 @@ public static class Program
             throw new Exception("missing DatabaseConfig service");
         }
         
-        switch(args[1])
+        switch(config)
         {
             case "DatabaseConfig.config":
                 Console.WriteLine(databaseConfig.DefaultConfig.Serialize());
