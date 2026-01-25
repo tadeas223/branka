@@ -33,8 +33,24 @@ public static class UtilFuncs
             return null;
         }
 
-        int id = int.Parse(split[0]);
+        if (!int.TryParse(split[0], out int id))
+        {
+            return null;
+        }
+        
         string ip = split[1];
+        
+        // Validace IP adresy
+        if (!IPAddress.TryParse(ip, out _))
+        {
+            return null;
+        }
+        
+        // Validace čísla účtu
+        if (id < 10000 || id > 99999)
+        {
+            return null;
+        }
 
         return (id, ip);
     }

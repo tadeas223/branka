@@ -88,7 +88,7 @@ public class TcpSession : ISession
     public void WriteLineDontLog(string msg)
     {
         msg += '\n';
-        Write(msg);
+        WriteDontLog(msg);
     }
     
     public async Task WriteDontLogAsync(string msg)

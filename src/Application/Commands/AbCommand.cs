@@ -4,14 +4,19 @@ using P2PBank.Application.Interface;
 using P2PBank.Utils;
 using P2PBank.Data.Interface;
 using P2PBank.Application.Interface.Models;
+using P2PBank.Presentation.Interface;
+using P2PBank.Presentation.Tcp;
 
 public class AbCommand: Command
 {
     private IAccountRepository accountRepository;
-    public AbCommand(IAccountRepository accountRepository, Log log) : base(log)
+    private ServerConfig serverConfig;
+    
+    public AbCommand(IAccountRepository accountRepository, ServerConfig serverConfig, Log log) : base(log)
     {
         Name = "AB";
         this.accountRepository = accountRepository;
+        this.serverConfig = serverConfig;
     }
 
     public override void InternalExecute()
@@ -41,7 +46,10 @@ public class AbCommand: Command
         }
         else
         {
-            BankConnection con = new(ip);
+            TcpServerConfig? tcpConfig = serverConfig as TcpServerConfig;
+            int port = tcpConfig?.Port ?? 65525;
+            int timeout = tcpConfig?.ClientTimeout ?? 5;
+            BankConnection con = new(ip, port, timeout);
 
             try
             {
@@ -49,7 +57,7 @@ public class AbCommand: Command
             }
             catch
             {
-                throw new UnifiedMessageException("Failed to deposit to a remote bank.");
+                throw new UnifiedMessageException("Failed to get balance from a remote bank.");
             }
         }
 
