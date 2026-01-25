@@ -54,7 +54,7 @@ public class TcpSession : ISession
     
     public void WriteLine(string msg)
     {
-        msg += '\n';
+        msg += Environment.NewLine;
         Write(msg);
         log.Info($"{HostIdentifier} {msg}");
     }
@@ -87,7 +87,7 @@ public class TcpSession : ISession
     
     public void WriteLineDontLog(string msg)
     {
-        msg += '\n';
+        msg += Environment.NewLine;
         WriteDontLog(msg);
     }
     
@@ -102,7 +102,7 @@ public class TcpSession : ISession
     
     public async Task WriteLineDontLogAsync(string msg)
     {
-        msg += '\n';
+        msg += Environment.NewLine;
         await WriteAsync(msg);
     }
 
