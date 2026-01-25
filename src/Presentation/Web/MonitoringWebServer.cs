@@ -29,8 +29,8 @@ public class MonitoringWebServer
     public void Start(int port = 8080)
     {
         var builder = WebApplication.CreateBuilder();
-        builder.WebHost.UseUrls($"http://localhost:{port}");
         app = builder.Build();
+        app.Urls.Add($"http://localhost:{port}");
 
         // Serve static HTML
         app.MapGet("/", async (HttpContext context) =>
