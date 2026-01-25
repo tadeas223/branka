@@ -2,6 +2,7 @@ namespace P2PBank.Presentation.Tcp;
 
 using System.Net.Sockets;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Utils;
 
 public class TcpSessionHandler : IDisposable
@@ -85,6 +86,12 @@ public class TcpSessionHandler : IDisposable
 
         while ((line = reader.ReadLine()) != null)
         {
+            line.Trim();
+            if(line.IsNullOrEmpty())
+            {
+                continue;
+            }
+
             lastPos = (int)reader.BaseStream.Position;
             OnMessageReceived?.Invoke(line);
             session.ProcessingRequest.WaitOne();
